@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LaundryApp">
+        <activity android:name=".customerregister"></activity>
+        <activity android:name=".accountmenu" />
+        <activity android:name=".usermenu" />
+        <activity android:name=".second" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
