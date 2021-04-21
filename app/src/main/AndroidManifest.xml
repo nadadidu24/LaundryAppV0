@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LaundryApp">
-        <activity android:name=".customerphoneverify"></activity>
+        <activity android:name=".HomeActivityRunner"></activity>
+        <activity android:name=".HomeActivityProvider" />
+        <activity android:name=".CustForgotPassword" />
+        <activity android:name=".customerloginemail" />
+        <activity android:name=".HomeActivityCustomer" />
+        <activity android:name=".customerphoneverify" />
         <activity android:name=".runnerregister" />
         <activity android:name=".customerregister" />
         <activity android:name=".accountmenu" />
