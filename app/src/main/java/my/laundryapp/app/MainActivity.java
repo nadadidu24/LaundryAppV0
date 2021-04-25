@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,8 +38,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+/*
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(MainActivity.this, second.class);
+                startActivity(intent);
+            }
+        }).start();
+*/
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -53,17 +66,20 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 String role = dataSnapshot.getValue(String.class);
                                 if (role.equals("Customer")) {
-                                    Intent n = new Intent(MainActivity.this, HomeActivityCustomer.class);
+                                    Intent n = new Intent(MainActivity.this, Main4Activity.class);
+
                                     startActivity(n);
                                     finish();
                                 }
                                 if (role.equals("LaundryProvider")) {
                                     Intent a = new Intent(MainActivity.this, HomeActivityProvider.class);
+
                                     startActivity(a);
                                     finish();
                                 }
                                 if (role.equals("LaundryRunner")) {
                                     Intent intent = new Intent(MainActivity.this, HomeActivityRunner.class);
+
                                     startActivity(intent);
                                     finish();
                                 }
@@ -104,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, 3000);
+
+
+
+
 
     }
 }

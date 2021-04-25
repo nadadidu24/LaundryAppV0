@@ -67,7 +67,7 @@ public class customerloginemail extends AppCompatActivity {
                                     if (FAuth.getCurrentUser().isEmailVerified()) {
                                         mDialog.dismiss();
                                         Toast.makeText(customerloginemail.this, "You are logged in", Toast.LENGTH_SHORT).show();
-                                        Intent z = new Intent(customerloginemail.this, HomeActivityCustomer.class);
+                                        Intent z = new Intent(customerloginemail.this, Main4Activity.class);
                                         startActivity(z);
                                         finish();
 
