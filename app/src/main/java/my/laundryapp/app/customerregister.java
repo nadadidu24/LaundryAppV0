@@ -110,6 +110,7 @@ public class customerregister extends AppCompatActivity {
                                         hashMappp.put("Name", customername);
                                         hashMappp.put("PhoneNumber", customerphone);
                                         hashMappp.put("Password", customerpass);
+                                        hashMappp.put("CustUid",useridd);
                                         firebaseDatabase.getInstance().getReference("Customer")
                                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                                 .setValue(hashMappp).addOnCompleteListener(new OnCompleteListener<Void>() {

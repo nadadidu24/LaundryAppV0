@@ -32,4 +32,9 @@
         android:name="my.laundryapp.app.nav_service_detail1"
         android:label="blank"
         tools:layout="@layout/nav_service_detail1" />
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="my.laundryapp.app.ui.cart.CartFragment"
+        android:label="@string/menu_cart"
+        tools:layout="@layout/fragment_cart" />
 </navigation>

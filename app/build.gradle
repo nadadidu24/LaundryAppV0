@@ -76,6 +76,16 @@ dependencies {
     implementation 'com.github.andremion:counterfab:1.2.0'
 
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+
+    implementation "io.reactivex.rxjava3:rxjava:3.0.0-RC3"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    implementation 'androidx.room:room-rxjava2:2.2.0-rc01'
+    annotationProcessor 'androidx.room:room-compiler:2.2.0-rc01'
+
+    implementation 'com.github.andremion:counterfab:1.2.2-alpha1'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
     
 
 

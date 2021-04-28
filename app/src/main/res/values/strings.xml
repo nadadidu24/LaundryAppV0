@@ -14,8 +14,11 @@
     <string name="menu_services_list">Services list</string>
     <string name="menu_services_detail">Services Detail</string>
     <string name="sign_out">Sign out</string>
+    <string name="menu_cart">Cart</string>
 
+    <string name="add_on">Addon</string>
     <string name="services">Services</string>
+    <string name="size">Bag Size</string>
     <string name="best_deals">Best deals</string>
     <string name="menu_catalog">Categories</string>
     <!-- TODO: Remove or change this placeholder text -->

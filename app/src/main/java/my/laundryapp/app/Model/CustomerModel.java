@@ -1,18 +1,27 @@
 package my.laundryapp.app.Model;
 
 public class CustomerModel {
-    private String Capital,ConfirmPassword,Email,Name,Password,PhoneNumber;
+    private String Capital,ConfirmPassword,Email,Name,Password,PhoneNumber,CustUid;
 
     public CustomerModel() {
     }
 
-    public CustomerModel(String capital, String confirmPassword, String email, String name, String password, String phoneNumber) {
+    public CustomerModel(String capital, String confirmPassword, String email, String name, String password, String phoneNumber, String custUid) {
         Capital = capital;
         ConfirmPassword = confirmPassword;
         Email = email;
         Name = name;
         Password = password;
         PhoneNumber = phoneNumber;
+        CustUid = custUid;
+    }
+
+    public String getCustUid() {
+        return CustUid;
+    }
+
+    public void setCustUid(String custUid) {
+        CustUid = custUid;
     }
 
     public String getCapital() {
