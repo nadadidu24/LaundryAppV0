@@ -1,72 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollbars="none"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:weightSum="5">
+
+
+                <LinearLayout
+                    android:id="@+id/layout_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <com.asksira.loopingviewpager.LoopingViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="276dp"
+                        app:autoScroll="true"
+                        app:isInfinite="true"
+                        app:scrollInterval="5000"
+                        app:viewpagerAspectRatio="0.9"></com.asksira.loopingviewpager.LoopingViewPager>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey" />
+
+                <LinearLayout
+                    android:id="@+id/my_location_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="horizontal"
+                    android:paddingTop="15dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:fontFamily="@font/mulilight"
+                        android:paddingTop="6dp"
+                        app:boxBackgroundMode="none"
+                        app:startIconDrawable="@drawable/ic_baseline_location_on_24">
+
+
+                        <EditText
+
+                            android:id="@+id/my_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:fontFamily="@font/mulliregular"
+                            android:hint="My location"
+
+
+                            android:paddingTop="5dp"
+                            android:textSize="25dp" />
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/button_change_address_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30sp"
+                        android:background="@drawable/buttonbg"
+                        android:fontFamily="@font/mulliregular"
+                        android:text="change"
+                        android:textSize="10dp" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/slenco"
+                        android:paddingTop="25dp"
+                        android:text="@string/services"
+                        android:textColor="#403F3F"
+                        android:textSize="24sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_servives"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+    <SearchView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white"
-        android:weightSum="5" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="3">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="8dp"
-                android:fontFamily="@font/mulliregular"
-                android:text="@string/best_deals"
-                android:textStyle="bold"
-                android:textSize="24sp"></TextView>
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/whitebutton"
+        android:iconifiedByDefault="false"
 
-            <com.asksira.loopingviewpager.LoopingViewPager
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/viewpager"
-                app:isInfinite="true"
-                app:autoScroll="true"
-                app:scrollInterval="5000"
-                app:viewpagerAspectRatio="1.33"></com.asksira.loopingviewpager.LoopingViewPager>
+        android:queryHint="Search laundry shops or services"
+        android:visibility="visible"
+        app:defaultQueryHint="hint"
+        app:iconifiedByDefault="false"
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:padding="8dp"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:fontFamily="@font/mulliregular"
-                android:text="@string/services"
-                android:textSize="24sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/recycler_servives" />
-
-
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-
-
-</RelativeLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="hint" />
+</androidx.constraintlayout.widget.ConstraintLayout>

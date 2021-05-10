@@ -1,7 +1,7 @@
 package my.laundryapp.app.Model;
 
 public class CustomerModel {
-    private String Capital,ConfirmPassword,Email,Name,Password,PhoneNumber,CustUid;
+    private String Capital,ConfirmPassword,Email,Name,Password,PhoneNumber,custUid;
 
     public CustomerModel() {
     }
@@ -13,15 +13,15 @@ public class CustomerModel {
         Name = name;
         Password = password;
         PhoneNumber = phoneNumber;
-        CustUid = custUid;
+        this.custUid = custUid;
     }
 
     public String getCustUid() {
-        return CustUid;
+        return custUid;
     }
 
     public void setCustUid(String custUid) {
-        CustUid = custUid;
+        this.custUid = custUid;
     }
 
     public String getCapital() {

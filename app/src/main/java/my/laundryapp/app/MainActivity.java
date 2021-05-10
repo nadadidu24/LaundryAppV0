@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView appTitle = (TextView) findViewById(R.id.textView7);
+        Animation anim = new AlphaAnimation(0.0f,1.0f); //0.0 means Black and 1.0 means full opacity
+        anim.setDuration(1000);
+        anim.setStartOffset(100);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        appTitle.startAnimation(anim);
+
 /*
         new Thread(new Runnable() {
             @Override
@@ -119,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        }, 3000);
+        }, 4000);
 
 
 

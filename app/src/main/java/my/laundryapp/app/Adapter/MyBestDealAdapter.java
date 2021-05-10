@@ -12,11 +12,14 @@ import com.asksira.loopingviewpager.LoopingPagerAdapter;
 import com.asksira.loopingviewpager.LoopingViewPager;
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import my.laundryapp.app.EventBus.BestDealItemClick;
 import my.laundryapp.app.Model.BestDealModel;
 import my.laundryapp.app.R;
 
@@ -42,6 +45,11 @@ public class MyBestDealAdapter extends LoopingPagerAdapter<BestDealModel> {
         unbinder = ButterKnife.bind(this,convertView);
         //set data
         Glide.with(convertView).load(itemList.get(listPosition).getImage()).into(img_best_deal);
-    txt_best_deal.setText(itemList.get(listPosition).getName());
+    //txt_best_deal.setText(itemList.get(listPosition).getName());
+
+    convertView.setOnClickListener(v -> {
+        EventBus.getDefault().postSticky(new BestDealItemClick(itemList.get(listPosition)));
+    });
+
     }
 }

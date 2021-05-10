@@ -1,19 +1,24 @@
 package my.laundryapp.app;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -110,7 +115,7 @@ public class customerregister extends AppCompatActivity {
                                         hashMappp.put("Name", customername);
                                         hashMappp.put("PhoneNumber", customerphone);
                                         hashMappp.put("Password", customerpass);
-                                        hashMappp.put("CustUid",useridd);
+                                        hashMappp.put("custUid",useridd);
                                         firebaseDatabase.getInstance().getReference("Customer")
                                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                                 .setValue(hashMappp).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -123,7 +128,114 @@ public class customerregister extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            AlertDialog.Builder builder = new AlertDialog.Builder(customerregister.this);
+                                                            //adik edit
+                                                            AlertDialog.Builder buildero = new AlertDialog.Builder(customerregister.this);
+
+                                                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(customerregister.this, R.style.myFullscreenAlertDialogStyle);
+
+
+
+                                                            View view = LayoutInflater.from(customerregister.this).inflate(R.layout.layout_successfull_register,null);
+
+                                                            builder.setView(view);
+
+                                                            builder.setNegativeButton("No,thank you", (dialog, which) -> {
+                                                                dialog.dismiss();
+
+                                                                buildero.setTitle("Alright");
+                                                                buildero.setMessage("Don't forget to verify your email before login");
+                                                                buildero.setCancelable(false);
+                                                                buildero.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                                        dialog.dismiss();
+                                                                        Intent login = new Intent(customerregister.this, accountmenu.class);
+                                                                        startActivity(login);
+                                                                    }
+                                                                });
+                                                                AlertDialog alert = buildero.create();
+                                                                //TextView messageView = (TextView)alert.findViewById(android.R.id.message);
+                                                                //messageView.setGravity(Gravity.CENTER);
+
+                                                                alert.show();
+
+                                                                TextView titleView = (TextView)alert.findViewById(customerregister.this.getResources().getIdentifier("alertTitle", "id", "android"));
+                                                                if (titleView != null) {
+                                                                    titleView.setGravity(Gravity.CENTER);
+                                                                }
+                                                                TextView messageView = (TextView)alert.findViewById(android.R.id.message);
+                                                                messageView.setGravity(Gravity.CENTER);
+
+
+
+
+
+                                                            }).setPositiveButton("Yes, thankyou", (dialog, which) -> {
+                                                                //Toast.makeText(getContext(), "Coming soon features!", Toast.LENGTH_SHORT).show();
+
+                                                                android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(customerregister.this, R.style.myFullscreenAlertDialogStyle);
+
+
+
+                                                                View view1 = LayoutInflater.from(customerregister.this).inflate(R.layout.layout_tutorial,null);
+
+                                                                builder1.setView(view1);
+
+                                                                builder1.setPositiveButton("Close", (dialog1, which1) -> {
+                                                                    dialog1.dismiss();
+
+
+                                                                    buildero.setMessage("Please verify your email before login");
+                                                                    buildero.setCancelable(false);
+                                                                    buildero.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int which) {
+
+                                                                            dialog.dismiss();
+                                                                            Intent login = new Intent(customerregister.this, accountmenu.class);
+                                                                            startActivity(login);
+                                                                        }
+                                                                    });
+                                                                    AlertDialog alert = buildero.create();
+                                                                    //TextView messageView = (TextView)alert.findViewById(android.R.id.message);
+                                                                    //messageView.setGravity(Gravity.CENTER);
+
+                                                                    alert.show();
+
+                                                                    TextView messageView = (TextView)alert.findViewById(android.R.id.message);
+                                                                    messageView.setGravity(Gravity.CENTER);
+                                                                });
+                                                                AlertDialog dialog1 = builder1.create();
+                                                                dialog1.show();
+
+                                                                // Buttons
+                                                                Button buttonOK = dialog1.getButton(DialogInterface.BUTTON_POSITIVE);
+                                                                buttonOK.setTextColor(ContextCompat.getColor(customerregister.this, R.color.colorPrimary));
+
+                                                                Button buttonNo = dialog1.getButton(DialogInterface.BUTTON_NEGATIVE);
+                                                                buttonNo.setTextColor(ContextCompat.getColor(customerregister.this, R.color.grey));
+
+
+
+                                                                //editjap
+                                                                //Intent login = new Intent(customerregister.this, accountmenu.class);
+                                                                //startActivity(login);
+
+
+                                                            });
+
+                                                            AlertDialog dialog = builder.create();
+                                                            dialog.show();
+
+                                                            // Buttons
+                                                            Button buttonOK = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                                                            buttonOK.setTextColor(ContextCompat.getColor(customerregister.this, R.color.colorPrimary));
+
+                                                            Button buttonNo = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                                                            buttonNo.setTextColor(ContextCompat.getColor(customerregister.this, R.color.grey));
+
+                                                            /*
                                                             builder.setMessage("Registered successfully!\nPlease verify your email");
                                                             builder.setCancelable(false);
                                                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -137,6 +249,8 @@ public class customerregister extends AppCompatActivity {
                                                             });
                                                             AlertDialog alert = builder.create();
                                                             alert.show();
+
+                                                             */
 
                                                         } else {
                                                             mDialog.dismiss();
@@ -184,7 +298,7 @@ public class customerregister extends AppCompatActivity {
 
         if (TextUtils.isEmpty(customername)) {
             custname.setErrorEnabled(true);
-            custname.setError("Firstname is required");
+            custname.setError("Name is required");
         } else {
             isValidname = true;
         }
@@ -206,7 +320,7 @@ public class customerregister extends AppCompatActivity {
         } else {
             if (customerpass.length() < 6) {
                 pass.setErrorEnabled(true);
-                pass.setError("password too weak");
+                pass.setError("Password must be 6 characters and above");
             } else {
                 isvalidpassword = true;
             }
@@ -226,7 +340,7 @@ public class customerregister extends AppCompatActivity {
             custphone.setErrorEnabled(true);
             custphone.setError("Mobile number is required");
         } else {
-            if (customerphone.length() < 10) {
+            if (customerphone.length() < 9) {
                 custphone.setErrorEnabled(true);
                 custphone.setError("Invalid mobile number");
             } else {
@@ -236,8 +350,13 @@ public class customerregister extends AppCompatActivity {
         if (TextUtils.isEmpty(customercapital)) {
             custcapitals.setErrorEnabled(true);
             custcapitals.setError("Field cannot be empty");
-        } else {
-            isvalidcapitals = true;
+        } else{
+            if (!"Malacca City".equals(customercapital) && !"Alor Gajah".equals(customercapital) && !"Jasin".equals(customercapital) ) {
+                custcapitals.setErrorEnabled(true);
+                custcapitals.setError("Location out of area");
+            } else {
+                isvalidcapitals = true;
+            }
         }
 
 

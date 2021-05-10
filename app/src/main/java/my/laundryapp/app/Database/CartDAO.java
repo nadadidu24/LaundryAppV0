@@ -16,17 +16,17 @@ import io.reactivex.Single;
 @Dao
 public interface CartDAO {
 
-    @Query("SELECT * FROM Cart WHERE custUid=:Email")
-    Flowable<List<CartItem>> getAllCart(String Email);
+    @Query("SELECT * FROM Cart WHERE custUid=:custUid")
+    Flowable<List<CartItem>> getAllCart(String custUid);
 
-    @Query("SELECT SUM(servicesQuantity) from Cart WHERE custUid=:Email")
-    Single<Integer> countItemInCart(String Email);
+    @Query("SELECT SUM(servicesQuantity) from Cart WHERE custUid=:custUid")
+    Single<Integer> countItemInCart(String custUid);
 
-    @Query("SELECT SUM((servicesPrice*servicesExtraPrice) * servicesQuantity) FROM Cart WHERE custUid=:Email")
-    Single<Double> sumPriceInCart(String Email);
+    @Query("SELECT SUM((servicesPrice+servicesExtraPrice) * servicesQuantity) FROM Cart WHERE custUid=:custUid")
+    Single<Double> sumPriceInCart(String custUid);
 
-    @Query("SELECT * FROM Cart WHERE servicesId=:servicesId AND custUid=:Email")
-    Single<CartItem> getItemInCart(String servicesId, String Email);
+    @Query("SELECT * FROM Cart WHERE servicesId=:servicesId AND custUid=:custUid")
+    Single<CartItem> getItemInCart(String servicesId, String custUid);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertOrReplaceAll(CartItem... cartItems);
@@ -37,11 +37,11 @@ public interface CartDAO {
     @Delete
     Single<Integer> deleteCartItems(CartItem cartItem);
 
-    @Query("DELETE FROM Cart WHERE custUid=:Email")
-    Single<Integer> cleanCart(String Email);
+    @Query("DELETE FROM Cart WHERE custUid=:custUid")
+    Single<Integer> cleanCart(String custUid);
 
-    @Query("SELECT * FROM Cart WHERE servicesId=:servicesId AND custUid=:Email AND servicesSize=:servicesSize AND servicesAddon=:servicesAddon")
-    Single<CartItem> getItemWithAllOptionsInCart( String Email,String servicesId,String servicesSize,String servicesAddon);
+    @Query("SELECT * FROM Cart WHERE servicesId=:servicesId AND custUid=:custUid AND servicesSize=:servicesSize AND servicesAddon=:servicesAddon")
+    Single<CartItem> getItemWithAllOptionsInCart( String custUid,String servicesId,String servicesSize,String servicesAddon);
 
 
 }

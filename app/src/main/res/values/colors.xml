@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#A8A7A7</color>
-    <color name="overlay_color">#55333639</color>
+    <color name="greyblack">#757070</color>
+    <color name="yellow">#ffcc01</color>
+    <color name="overlay_color">#52333639</color>
 
 
 </resources>

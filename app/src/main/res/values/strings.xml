@@ -9,18 +9,21 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Laundry App</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_services_list">Services list</string>
     <string name="menu_services_detail">Services Detail</string>
     <string name="sign_out">Sign out</string>
     <string name="menu_cart">Cart</string>
+    <string name="action_clear_cart">Clear cart</string>
 
     <string name="add_on">Addon</string>
-    <string name="services">Services</string>
+    <string name="services">Top services nearby </string>
     <string name="size">Bag Size</string>
     <string name="best_deals">Best deals</string>
-    <string name="menu_catalog">Categories</string>
+    <string name="menu_catalog">Services</string>
+    <string name="menu_services_list_order">Service order</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pick_up_deliver_at"><![CDATA[Pick up & Deliver at]]></string>
 </resources>

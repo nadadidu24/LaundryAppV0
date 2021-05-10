@@ -3,28 +3,39 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/img_best_deal"
-        android:scaleType="fitXY"></ImageView>
+        android:orientation="vertical">
 
-    <View
+        <ImageView
+            android:id="@+id/img_best_deal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="matrix" />
+
+        <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/overlay_color">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
 
-    </View>
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="10" >
+
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_best_deal"
-        android:text="@string/services"
+
         android:gravity="center_horizontal|center_vertical"
         android:layout_gravity="center_vertical"
         android:fontFamily="@font/mulilight"
         android:textColor="@color/white"
-        android:textSize="22sp"></TextView>
+        android:textSize="22sp"/>
 
+    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

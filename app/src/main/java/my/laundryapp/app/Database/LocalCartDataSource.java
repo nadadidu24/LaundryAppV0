@@ -8,54 +8,54 @@ import io.reactivex.Single;
 
 public class LocalCartDataSource implements CartDataSource {
 
-    private CartDAO cartDao;
+    private CartDAO cartDAO;
 
-    public LocalCartDataSource(CartDAO cartDao) {
-        this.cartDao = cartDao;
+    public LocalCartDataSource(CartDAO cartDAO) {
+        this.cartDAO = cartDAO;
     }
 
     @Override
-    public Flowable<List<CartItem>> getAllCart(String Email) {
-        return cartDao.getAllCart(Email);
+    public Flowable<List<CartItem>> getAllCart(String custUid) {
+        return cartDAO.getAllCart(custUid);
     }
 
     @Override
-    public Single<Integer> countItemInCart(String Email) {
-        return cartDao.countItemInCart(Email);
+    public Single<Integer> countItemInCart(String custUid) {
+        return cartDAO.countItemInCart(custUid);
     }
 
     @Override
-    public Single<Double> sumPriceInCart(String Email) {
-        return cartDao.sumPriceInCart(Email);
+    public Single<Double> sumPriceInCart(String custUid) {
+        return cartDAO.sumPriceInCart(custUid);
     }
 
     @Override
-    public Single<CartItem> getItemInCart(String servicesId, String Email) {
-        return cartDao.getItemInCart(servicesId,Email);
+    public Single<CartItem> getItemInCart(String servicesId, String custUid) {
+        return cartDAO.getItemInCart(servicesId,custUid);
     }
 
     @Override
     public Completable insertOrReplaceAll(CartItem... cartItems) {
-        return cartDao.insertOrReplaceAll(cartItems);
+        return cartDAO.insertOrReplaceAll(cartItems);
     }
 
     @Override
     public Single<Integer> updateCartItems(CartItem cartItem) {
-        return cartDao.updateCartItems(cartItem);
+        return cartDAO.updateCartItems(cartItem);
     }
 
     @Override
     public Single<Integer> deleteCartItems(CartItem cartItem) {
-        return cartDao.deleteCartItems(cartItem);
+        return cartDAO.deleteCartItems(cartItem);
     }
 
     @Override
-    public Single<Integer> cleanCart(String Email) {
-        return cartDao.cleanCart(Email);
+    public Single<Integer> cleanCart(String custUid) {
+        return cartDAO.cleanCart(custUid);
     }
 
     @Override
-    public Single<CartItem> getItemWithAllOptionsInCart(String Email, String servicesId, String servicesSize, String servicesAddon) {
-        return cartDao.getItemWithAllOptionsInCart(Email,servicesId,servicesSize,servicesAddon);
+    public Single<CartItem> getItemWithAllOptionsInCart(String custUid, String servicesId, String servicesSize, String servicesAddon) {
+        return cartDAO.getItemWithAllOptionsInCart(custUid,servicesId,servicesSize,servicesAddon);
     }
 }

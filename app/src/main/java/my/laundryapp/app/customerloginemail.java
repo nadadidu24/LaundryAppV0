@@ -3,6 +3,7 @@ package my.laundryapp.app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.karumi.dexter.Dexter;
 
 public class customerloginemail extends AppCompatActivity {
 
@@ -92,7 +94,7 @@ public class customerloginemail extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Intent Register = new Intent(customerloginemail.this, customerregister.class);
+                    Intent Register = new Intent(customerloginemail.this, usermenu.class);
                     startActivity(Register);
                     finish();
 
@@ -126,6 +128,7 @@ public class customerloginemail extends AppCompatActivity {
         pass.setError("");
 
         boolean isvalidemail = false, isvalidpassword = false, isvalid = false;
+
         if (TextUtils.isEmpty(em)) {
             email.setErrorEnabled(true);
             email.setError("Email is required");

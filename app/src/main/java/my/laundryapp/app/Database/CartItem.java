@@ -119,11 +119,12 @@ public class CartItem {
         this.servicesSize = servicesSize;
     }
 
+    @NonNull
     public String getCustUid() {
         return custUid;
     }
 
-    public void setCustUid(String custUid) {
+    public void setCustUid(@NonNull String custUid) {
         this.custUid = custUid;
     }
 

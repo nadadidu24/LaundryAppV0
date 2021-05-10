@@ -58,10 +58,37 @@
         android:text="Customer"
         android:textColor="@color/black"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/cust"
         app:layout_constraintTop_toBottomOf="@+id/titledesc" />
+
+    <Button
+        android:id="@+id/runnersu"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/whitegradientbutton"
+        android:backgroundTint="@null"
+        android:text="Laundry runner"
+        android:textColor="@color/black"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/runner"
+        app:layout_constraintTop_toBottomOf="@+id/custsu" />
+
+    <Button
+        android:id="@+id/providersu"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:background="@drawable/whitegradientbutton"
+        android:backgroundTint="@null"
+        android:text="Laundry provider"
+        android:textColor="@color/black"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/provider"
+        app:layout_constraintTop_toBottomOf="@+id/runnersu" />
 
     <ImageView
         android:id="@+id/cust"
@@ -69,12 +96,13 @@
         android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
-        android:src="@drawable/custresize"
+        android:src="@drawable/providerresize"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titledesc" />
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:layout_marginStart="25dp"
@@ -98,8 +126,8 @@
         app:layout_constraintTop_toBottomOf="@+id/cust" />
 
 
-
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:layout_marginStart="25dp"
@@ -118,7 +146,7 @@
         android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:src="@drawable/providerresize"
+        android:src="@drawable/custresize"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/runner" />
 

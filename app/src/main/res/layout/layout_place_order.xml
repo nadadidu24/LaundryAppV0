@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+    <TextView
+        android:id="@+id/txt_address_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fontFamily="@font/mulilight"
+        android:text="Your address"
+        android:textColor="@color/blue"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/mulilight"
+        android:text="@string/pick_up_deliver_at"
+        android:textColor="@color/blue"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:clickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mulilight">
+
+
+        <EditText
+            android:id="@+id/edt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/mulilight"
+
+            android:hint="Enter your location" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+
+        <RadioButton
+            android:id="@+id/rdi_home_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:fontFamily="@font/mulilight"
+            android:text="Home Address"
+            android:textColor="#555151"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <RadioButton
+            android:id="@+id/rdi_other_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="@font/mulilight"
+            android:text="Other Address"
+            android:textColor="#555151"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <RadioButton
+            android:id="@+id/rdi_ship_this_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="@font/mulilight"
+            android:text="Ship to this Address"
+            android:textColor="#555151"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+
+    </RadioGroup>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/mulilight"
+        android:text="Pick up time"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdi_pickup_now"
+            android:checked="true"
+            android:text="Pick up now (ASAP)"
+            android:fontFamily="@font/mulilight"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:textColor="#555151"/>
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/mulilight"
+        android:text="Delivery time"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdi_deliver_now"
+            android:checked="true"
+            android:text="Deliver ASAP"
+            android:fontFamily="@font/mulilight"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:textColor="#555151"/>
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/whitewstroke"
+        android:fontFamily="@font/mulilight"
+        app:boxBackgroundMode="none">
+
+
+        <EditText
+            android:id="@+id/edt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mulilight"
+            android:hint="Please leave a message..." />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/mulilight"
+        android:text="Payment methods"
+        android:textColor="@color/blue"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdi_ood"
+            android:checked="true"
+            android:text="Cash on Delivery"
+            android:fontFamily="@font/mulilight"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:textColor="#555151"/>
+
+        <RadioButton
+            android:id="@+id/rdi_braintree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+
+            android:fontFamily="@font/mulilight"
+            android:text="Braintree"
+            android:textColor="#555151"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+
+
+    </RadioGroup>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

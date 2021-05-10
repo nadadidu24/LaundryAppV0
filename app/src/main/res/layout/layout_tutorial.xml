@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollbars="none"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_marginTop="45dp"
+
+            android:paddingBottom="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textSuccessfull"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="How to order?"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="1. Choose your bag"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="Select services from services list\nand choose your size of dobi bag.
+"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/dobibag2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="Regular dobi bag (7kg) approximately fit up to 35pcs\n\n
+Large dobi bag (16 kg) approximately fit up to 75pcs
+"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/greyblack"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                />
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:orientation="horizontal"
+                android:background="@drawable/whitegradientbutton"
+                android:paddingRight="10dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:textAlignment="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/ic_baseline_lightbulb_24"/>
+
+                <TextView
+                    android:textAlignment="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/latoheavy"
+                    android:text="Choose Addon Bag to buy more dobi bags!"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="2. Choose your time slots"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="Place order and pick a time for\nyour pickup and delivery session."
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="186dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/schedule"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="3. Meet your laundry runner"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="Fill up your laundry in your dobi bag,\nwe'll take care of the rest right away!
+"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="181dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/runner"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:orientation="horizontal"
+                android:background="@drawable/whitegradientbutton"
+                android:paddingRight="16dp"
+                android:paddingLeft="8dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:textAlignment="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/ic_baseline_lightbulb_24"/>
+
+                <TextView
+                    android:textAlignment="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/latoheavy"
+                    android:text="For first time user only, we'll meet\nyou with your free REGULAR dobi bag.
+"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="4. Sit back and relax"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/latoheavy"
+                android:text="We'll clean your items at your selected\nlaundry shop, then return them right\nat your doorstep!
+"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="186dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/relaxman"
+                />
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

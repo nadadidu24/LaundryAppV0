@@ -437,7 +437,7 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
                 });
                 chip_group_user_selected_addon.addView(chip);
             }
-        }else if (Common.selectedService.getUserSelectedAddon().size() == 0)
+        }else
             chip_group_user_selected_addon.removeAllViews();
     }
 
@@ -454,8 +454,13 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
                 .addOnCompleteListener(task -> {
                       if(task.isSuccessful())
                       {
+
+
                           //after submit to commentref,update value rating average in services
                           addRatingToServices(commentModel.getRatingValue());
+
+
+
                       }
                       waitingDialog.dismiss();
                 });
@@ -483,14 +488,14 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
                         laundryServicesModel.setRatingCount(0l);
                     double sumRating = laundryServicesModel.getRatingValue()+ratingValue;
                     long ratingCount = laundryServicesModel.getRatingCount()+1;
-                    double result = sumRating/ratingCount;
+
 
                     Map<String,Object> updateData = new HashMap<>();
-                    updateData.put("ratingValue",result);
+                    updateData.put("ratingValue",sumRating);
                     updateData.put("ratingCount",ratingCount);
 
                     //update data in variable
-                    laundryServicesModel.setRatingValue(result);
+                    laundryServicesModel.setRatingValue(sumRating);
                     laundryServicesModel.setRatingCount(ratingCount);
 
                     snapshot.getRef()
@@ -499,9 +504,29 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
                                 waitingDialog.dismiss();
                                 if(task.isSuccessful())
                                 {
+
+                                    /*Size
+                                    for(SizeModel sizeModel: Common.selectedService.getSize())
+                                    {
+                                        RadioButton radioButton = new RadioButton(getContext());
+                                        radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                                            if(isChecked)
+                                                Common.selectedService.setUserSelectedSize(sizeModel);
+                                            calculateTotalPrice(); //update Price
+
+
+                                        });
+
+                                     */
                                     Toast.makeText(getContext(),"Thank you!",Toast.LENGTH_SHORT).show();
-                                    Common.selectedService = laundryServicesModel;
-                                    serviceDetailViewModel.setServiceModel(laundryServicesModel);
+
+                                    displayRating(laundryServicesModel);
+
+
+                                    //Common.selectedService = laundryServicesModel;
+                                    //serviceDetailViewModel.setServiceModel(laundryServicesModel);
+
+
                                 }
                             });
                 }
@@ -519,6 +544,13 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
 
     }
 
+    private void displayRating(LaundryServicesModel laundryServicesModel) {
+
+        if(laundryServicesModel.getRatingValue() != null)
+            ratingBar.setRating(laundryServicesModel.getRatingValue().floatValue() / laundryServicesModel.getRatingCount());
+
+    }
+
     private void displayInfo(LaundryServicesModel laundryServicesModel) {
         Glide.with(getContext()).load(laundryServicesModel.getImage()).into(img_services);
         services_name.setText(new StringBuilder(laundryServicesModel.getName()));
@@ -526,7 +558,7 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
         service_price.setText(new StringBuilder(laundryServicesModel.getPrice().toString()));
 
         if(laundryServicesModel.getRatingValue() != null)
-        ratingBar.setRating(laundryServicesModel.getRatingValue().floatValue());
+        ratingBar.setRating(laundryServicesModel.getRatingValue().floatValue() / laundryServicesModel.getRatingCount());
 
         ((AppCompatActivity)getActivity())
                 .getSupportActionBar()
@@ -577,6 +609,7 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
 
 
         //size
+        if(Common.selectedService.getUserSelectedSize() != null)
         totalPrice += Double.parseDouble(Common.selectedService.getUserSelectedSize().getPrice().toString());
 
         displayPrice = totalPrice * (Integer.parseInt(numberButton.getNumber()));

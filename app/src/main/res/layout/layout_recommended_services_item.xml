@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_category_name"
-        android:text="@string/services"
+        android:text="Wash"
         android:gravity="center_horizontal"
         android:fontFamily="@font/mulilight"
         android:textSize="20sp"></TextView>

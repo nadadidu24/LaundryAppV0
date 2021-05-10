@@ -37,4 +37,9 @@
         android:name="my.laundryapp.app.ui.cart.CartFragment"
         android:label="@string/menu_cart"
         tools:layout="@layout/fragment_cart" />
+    <fragment
+        android:id="@+id/nav_view_orders"
+        android:name="my.laundryapp.app.ui.view_orders.ViewOrdersFragment"
+        android:label="@string/menu_services_list_order"
+        tools:layout="@layout/fragment_view_order" />
 </navigation>

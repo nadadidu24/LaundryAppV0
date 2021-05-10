@@ -7,12 +7,31 @@
     android:background="@color/white"
     tools:context=".customerloginemail">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:paddingTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
+        android:layout_gravity="center"
         android:layout_marginRight="40dp"
         android:adjustViewBounds="false"
         android:src="@drawable/logoresize"
@@ -29,6 +48,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/mulilight"
         android:text="@string/mainapptitle"
+        android:layout_gravity="center"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="17sp"
@@ -39,6 +59,7 @@
 
     <TextView
         android:id="@+id/titlelogin"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -52,60 +73,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/mulilight"
-        android:text="Forgot password?"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/clickhereinfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonlogincust" />
 
-    <TextView
-        android:id="@+id/clickhereinfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/mulilight"
-        android:text="Click here"
-        android:textColor="@color/blue"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/info"
-        app:layout_constraintTop_toBottomOf="@+id/buttonlogincust" />
-
-    <TextView
-        android:id="@+id/infonoaccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/mulilight"
-        android:text="Don't have an account?"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/registerheretxt"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/info" />
-
-    <TextView
-        android:id="@+id/registerheretxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="64dp"
-        android:fontFamily="@font/mulilight"
-        android:text="Register here"
-        android:textColor="@color/blue"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/infonoaccount"
-        app:layout_constraintTop_toBottomOf="@+id/info" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/logincustemail"
@@ -160,5 +128,80 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logincustpass" />
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:paddingTop="15dp">
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/mulilight"
+            android:text="Forgot password?"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonlogincust" />
+
+        <TextView
+            android:id="@+id/clickhereinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="5dp"
+
+            android:fontFamily="@font/mulilight"
+            android:text="Click here"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+
+
+             />
+
+        </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:paddingTop="15dp">
+        <TextView
+            android:id="@+id/infonoaccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/mulilight"
+            android:text="Don't have an account?"
+            android:textSize="16sp"
+             />
+
+        <TextView
+            android:id="@+id/registerheretxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/mulilight"
+            android:text="Register here"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+             />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
