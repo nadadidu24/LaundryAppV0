@@ -43,8 +43,8 @@ public class ServicesListFragment extends Fragment {
         slideshowViewModel =
                 new ViewModelProvider(this).get(ServicesListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_services_list, container, false);
-unbinder= ButterKnife.bind(this,root);
-initViews();
+        unbinder= ButterKnife.bind(this,root);
+        initViews();
         slideshowViewModel.getMutableLiveDataFoodList().observe(getViewLifecycleOwner(), new Observer<List<LaundryServicesModel>>() {
             @Override
             public void onChanged(List<LaundryServicesModel> laundryServicesModels) {

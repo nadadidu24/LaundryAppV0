@@ -17,12 +17,12 @@ public class accountmenu extends AppCompatActivity {
         setContentView(R.layout.activity_accountmenu);
 
         usermenu = findViewById(R.id.registerbutton);
-        emaillogin = findViewById(R.id.loginemail);
+        emaillogin = findViewById(R.id.logincustphone);
 
         usermenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(accountmenu.this, usermenu.class);
+                Intent intent = new Intent(accountmenu.this, customerregister.class);
                 startActivity(intent);
             }
         });

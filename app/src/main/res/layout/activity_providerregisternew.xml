@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".customerregister">
+    tools:context=".providerregisternew">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,8 +29,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
+                android:textAlignment="center"
                 android:fontFamily="@font/mulilight"
-                android:text="Sign Up"
+                android:text="Sign Up as\nLaundry Provider"
                 android:textColor="#474545"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/custname"
+                android:id="@+id/providername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -72,7 +72,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/custemail"
+                android:id="@+id/provideremail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -90,7 +90,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:id="@+id/custphone"
+                android:id="@+id/providerphone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -102,18 +102,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/custemail">
 
                 <com.hbb20.CountryCodePicker
-                    android:id="@+id/CountryCode"
+                    android:id="@+id/providerCountryCode"
                     android:layout_width="160dp"
                     android:layout_height="match_parent"
                     app:ccp_autoDetectCountry="true"
                     app:ccp_showNameCode="true" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/Mobileno"
+                    android:id="@+id/providerMobileno"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/numberhere"
                         android:layout_width="283dp"
                         android:layout_height="wrap_content"
                         android:hint="Mobile number"
@@ -124,7 +125,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/custcapital"
+                android:id="@+id/providercapital"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,7 +141,7 @@
                 app:startIconDrawable="@drawable/ic_baseline_home_24">
 
                 <AutoCompleteTextView
-                    android:id="@+id/custcapitaltext"
+                    android:id="@+id/providercapitaltext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -156,7 +157,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/custpass"
+                android:id="@+id/providerpass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -175,7 +176,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/custpass2"
+                android:id="@+id/providerpass2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -194,7 +195,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/buttonsignupcust"
+                android:id="@+id/buttonsignupprovider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -213,7 +214,6 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 
 

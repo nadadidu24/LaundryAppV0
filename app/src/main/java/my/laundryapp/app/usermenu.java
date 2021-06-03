@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class usermenu extends AppCompatActivity {
 
-    Button custsignup;
+    Button custsignup,providersignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +17,20 @@ public class usermenu extends AppCompatActivity {
         setContentView(R.layout.activity_usermenu);
 
         custsignup=findViewById(R.id.custsu);
+        providersignup=findViewById(R.id.providersu);
 
         custsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(usermenu.this, customerregister.class);
+                startActivity(intent);
+            }
+        });
+
+        providersignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(usermenu.this, providerRegister.class);
                 startActivity(intent);
             }
         });

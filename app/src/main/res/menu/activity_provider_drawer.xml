@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/home_group">
+        <item
+            android:id="@+id/nav_category_provider"
+            android:icon="@drawable/ic_baseline_list_alt_24"
+            android:title="@string/menu_provider_category" />
+
+        </group>
+    <group android:id="@+id/sevices_group">
+        <item
+            android:id="@+id/attendanceFragment"
+            android:icon="@drawable/ic_baseline_checkroom_24"
+            android:title="Attendance" />
+    </group>
+
+    <group android:id="@+id/signoutprovider_group">
+        <item
+            android:id="@+id/nav_signoutnow_provider"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:title="Sign out" />
+    </group>
+
+
+
+
+
+
+
+
+</menu>

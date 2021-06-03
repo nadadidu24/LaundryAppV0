@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 
 public class customerloginemail extends AppCompatActivity {
@@ -29,6 +34,8 @@ public class customerloginemail extends AppCompatActivity {
     FirebaseAuth FAuth;
     String em;
     String pwd;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +74,50 @@ public class customerloginemail extends AppCompatActivity {
 
                                     mDialog.dismiss();
                                     if (FAuth.getCurrentUser().isEmailVerified()) {
-                                        mDialog.dismiss();
-                                        Toast.makeText(customerloginemail.this, "You are logged in", Toast.LENGTH_SHORT).show();
-                                        Intent z = new Intent(customerloginemail.this, Main4Activity.class);
-                                        startActivity(z);
-                                        finish();
+                                        FAuth = FirebaseAuth.getInstance();
+
+                                        databaseReference = FirebaseDatabase.getInstance().getReference("User").child(FirebaseAuth.getInstance().getUid() + "/Role");
+                                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                String role = dataSnapshot.getValue(String.class);
+                                                if (role.equals("Customer")) {
+
+                                                    mDialog.dismiss();
+                                                    Toast.makeText(customerloginemail.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                                                    Intent z = new Intent(customerloginemail.this, Main4Activity.class); //tukar this nanti
+                                                    startActivity(z);
+                                                    finish();
+                                                }
+                                                if (role.equals("LaundryProvider")) {
+                                                    mDialog.dismiss();
+                                                    Toast.makeText(customerloginemail.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                                                    Intent z = new Intent(customerloginemail.this, ProviderActivity.class); //tukar this nanti
+                                                    startActivity(z);
+                                                    finish();
+                                                }
+                                                if (role.equals("LaundryRunner")) {
+                                                    mDialog.dismiss();
+                                                    Toast.makeText(customerloginemail.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                                                    Intent z = new Intent(customerloginemail.this, ProviderActivity.class); //tukar this nanti
+                                                    startActivity(z);
+                                                    finish();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Toast.makeText(customerloginemail.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+
+                                            }
+                                        });
+
+
+                                        //mDialog.dismiss();
+                                        //Toast.makeText(customerloginemail.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                                        //Intent z = new Intent(customerloginemail.this, ProviderActivity.class); //tukar this nanti
+                                        //startActivity(z);
+                                        //finish();
 
 
                                     } else {

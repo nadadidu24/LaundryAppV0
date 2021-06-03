@@ -34,12 +34,22 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth Fauth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+    Button button;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+       
+
+
+
+
+
+
 
         TextView appTitle = (TextView) findViewById(R.id.textView7);
         Animation anim = new AlphaAnimation(0.0f,1.0f); //0.0 means Black and 1.0 means full opacity
@@ -63,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 */
+
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -83,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                                     finish();
                                 }
                                 if (role.equals("LaundryProvider")) {
-                                    Intent a = new Intent(MainActivity.this, HomeActivityProvider.class);
+                                    Intent a = new Intent(MainActivity.this, ProviderActivity.class);
 
                                     startActivity(a);
                                     finish();
@@ -131,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, 4000);
+
+
+
+
+
 
 
 
