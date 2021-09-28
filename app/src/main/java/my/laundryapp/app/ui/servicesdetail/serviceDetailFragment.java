@@ -68,6 +68,7 @@ import my.laundryapp.app.Database.CartDatabase;
 import my.laundryapp.app.Database.CartItem;
 import my.laundryapp.app.Database.LocalCartDataSource;
 import my.laundryapp.app.EventBus.CounterCardEvent;
+import my.laundryapp.app.EventBus.MenuItemBack;
 import my.laundryapp.app.Model.AddonModel;
 import my.laundryapp.app.Model.CommentModel;
 import my.laundryapp.app.Model.CustomerModel;
@@ -662,4 +663,11 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
         compositeDisposable.clear();
         super.onStop();
     }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().postSticky(new MenuItemBack());
+        super.onDestroy();
+    }
+
 }

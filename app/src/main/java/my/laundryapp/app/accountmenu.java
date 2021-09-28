@@ -22,7 +22,7 @@ public class accountmenu extends AppCompatActivity {
         usermenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(accountmenu.this, customerregister.class);
+                Intent intent = new Intent(accountmenu.this, providerRegister.class);
                 startActivity(intent);
             }
         });
@@ -30,7 +30,7 @@ public class accountmenu extends AppCompatActivity {
         emaillogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(accountmenu.this, customerloginemail.class);
+                Intent intent = new Intent(accountmenu.this, providerRegister.class);
                 startActivity(intent);
             }
         });

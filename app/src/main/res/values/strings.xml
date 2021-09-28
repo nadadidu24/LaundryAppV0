@@ -29,4 +29,10 @@
     <string name="title_activity_provider">ProviderActivity</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_provider_category">Categories</string>
+    <string name="action_search">Search</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBNPjeXcgSNzi2Eyr1RYKDDms-eWDosvY4</string>
+    <string name="update_info">Update info</string>
+    <string name="title_activity_tracking_order">Map</string>
+
 </resources>

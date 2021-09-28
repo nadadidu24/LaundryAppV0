@@ -3,17 +3,35 @@ package my.laundryapp.app;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andremion.counterfab.CounterFab;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -26,10 +44,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -43,6 +64,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +84,7 @@ import my.laundryapp.app.EventBus.BestDealItemClick;
 import my.laundryapp.app.EventBus.CategoryClick;
 import my.laundryapp.app.EventBus.CounterCardEvent;
 import my.laundryapp.app.EventBus.HideFABCart;
+import my.laundryapp.app.EventBus.MenuItemBack;
 import my.laundryapp.app.EventBus.RecommendedCategoryClick;
 import my.laundryapp.app.EventBus.ServiceItemClick;
 import my.laundryapp.app.Model.CategoryModel;
@@ -66,6 +92,14 @@ import my.laundryapp.app.Model.CustomerModel;
 import my.laundryapp.app.Model.LaundryServicesModel;
 
 public class Main4Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Place placeSelected;
+    private AutocompleteSupportFragment place_fragment;
+    private PlacesClient placesClient;
+    private List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,
+            Place.Field.NAME,
+            Place.Field.ADDRESS,
+            Place.Field.LAT_LNG);
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
@@ -76,9 +110,12 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
     android.app.AlertDialog dialog;
 
+    int menuClickId=1;
+
     //change
     private FirebaseUser user;
     private DatabaseReference reference;
+    private DatabaseReference userRef;
     private String userCustID;
 
     //change
@@ -94,11 +131,27 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @SuppressWarnings("DEPRECATION")
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main4);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insetsController = getWindow().getInsetsController();
+            if (insetsController != null) {
+                insetsController.hide(WindowInsets.Type.statusBars());
+            }
+        } else {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+            );
+        }
 
+        initPlaceClient();
 
+        //ini TESTT
+        userRef = FirebaseDatabase.getInstance().getReference(Common.USER_REFERENCES);
+        //INI TEST
 
         dialog = new SpotsDialog.Builder().setContext(this).setCancelable(false).build();
 
@@ -144,6 +197,10 @@ navigationView.bringToFront(); //fixed
 
 
     }
+
+    private void initPlaceClient() {
+        Places.initialize(this,getString(R.string.google_maps_key));
+        placesClient = Places.createClient(this);    }
 
     private void centerTitle() {
         ArrayList<View> textViews = new ArrayList<>();
@@ -227,23 +284,142 @@ navigationView.bringToFront(); //fixed
         switch (item.getItemId())
         {
             case R.id.nav_home:
-                navController.navigate(R.id.nav_home);
+                if(item.getItemId() != menuClickId)
+                    navController.navigate(R.id.nav_home);
                 break;
             case R.id.nav_catalog:
-                navController.navigate(R.id.nav_catalog);
+                if(item.getItemId() != menuClickId)
+                    navController.navigate(R.id.nav_catalog);
                 break;
             case R.id.nav_sign_out:
-                signOut();
+
+                    signOut();
+                break;
+            case R.id.nav_update_info:
+
+                showUpdateInfoDialogue();
                 break;
             case R.id.nav_cart:
-                navController.navigate(R.id.nav_cart);
+                if(item.getItemId() != menuClickId)
+                    navController.navigate(R.id.nav_cart);
                 break;
             case R.id.nav_view_orders:
-                navController.navigate(R.id.nav_view_orders);
+                if(item.getItemId() != menuClickId)
+                    navController.navigate(R.id.nav_view_orders);
                 break;
 
         }
+        menuClickId = item.getItemId();
         return true;
+    }
+
+    private void showUpdateInfoDialogue() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, R.style.myFullscreenAlertDialogStyle);
+        //builder.setTitle("Register");
+        //builder.setMessage("Please Fill infromation . \nAdmin will accept sooner");
+
+        View itemView = LayoutInflater.from(this).inflate(R.layout.layout_update_profile, null);
+        EditText edt_name = (EditText) itemView.findViewById(R.id.edt_name);
+        EditText edt_phone = (EditText) itemView.findViewById(R.id.edt_phone);
+        //EditText edt_address = (EditText) itemView.findViewById(R.id.edt_address);
+        TextView txt_address_detail = (TextView) itemView.findViewById(R.id.txt_address_detail);
+
+        edt_name.requestFocus();
+        edt_name.setCursorVisible(true);
+        edt_name.setTextIsSelectable(true);
+        edt_name.requestFocusFromTouch();
+        edt_name.clearFocus();
+
+        place_fragment = (AutocompleteSupportFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.places_autocomplete_fragment);
+        place_fragment.setPlaceFields(placeFields);
+        place_fragment.setHint("Home");
+        place_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                placeSelected = place;
+                txt_address_detail.setText(place.getAddress());
+
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Toast.makeText(Main4Activity.this, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        //set data
+        edt_name.setText(Common.currentUser.getName());
+        txt_address_detail.setText(Common.currentUser.getAddress());
+        edt_phone.setText(user.getPhoneNumber());
+        builder.setNegativeButton("CANCEL", (dialog, which) -> {
+            dialog.dismiss();
+        })
+                .setPositiveButton("UPDATE", (dialog, which) -> {
+                   if(placeSelected != null)
+                   {
+                       if (TextUtils.isEmpty(edt_name.getText().toString())) {
+                           Toast.makeText(Main4Activity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
+                           return;
+                       }
+
+                       Map<String,Object> update_data = new HashMap<>();
+                       update_data.put("name",edt_name.getText().toString());
+                       update_data.put("address",txt_address_detail.getText().toString());
+                       update_data.put("lat",placeSelected.getLatLng().latitude);
+                       update_data.put("lng",placeSelected.getLatLng().longitude);
+                       
+                       FirebaseDatabase.getInstance()
+                               .getReference(Common.USER_REFERENCES)
+                               .child(Common.currentUser.getCustUid())
+                               .updateChildren(update_data)
+                               .addOnFailureListener(new OnFailureListener() {
+                                   @Override
+                                   public void onFailure(@NonNull Exception e) {
+                                       dialog.dismiss();
+                                       Toast.makeText(Main4Activity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                       
+                                   }
+                               })
+                               .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                   @Override
+                                   public void onSuccess(Void aVoid) {
+                                       dialog.dismiss();
+                                       Toast.makeText(Main4Activity.this, "Update info success", Toast.LENGTH_SHORT).show();
+                                       Common.currentUser.setName(update_data.get("name").toString());
+                                       Common.currentUser.setAddress(update_data.get("address").toString());
+                                       Common.currentUser.setLat(Double.parseDouble(update_data.get("lat").toString()));
+                                       Common.currentUser.setLng(Double.parseDouble(update_data.get("lng").toString()));
+                                   }
+                               });
+
+                   }
+                   else
+                   {
+                       Toast.makeText(Main4Activity.this, "Please select address", Toast.LENGTH_SHORT).show();
+
+                   }
+
+                });
+
+
+        builder.setView(itemView);
+
+        androidx.appcompat.app.AlertDialog resgisterDialog = builder.create();
+        resgisterDialog.setOnDismissListener(dialog -> {
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(place_fragment);
+            fragmentTransaction.commit();
+
+        });
+        resgisterDialog.show();
+        // Buttons
+        Button buttonOK = resgisterDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        buttonOK.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+        Button buttonNo = resgisterDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        buttonNo.setTextColor(ContextCompat.getColor(this, R.color.grey));
     }
 
     //eventbus
@@ -546,6 +722,15 @@ navigationView.bringToFront(); //fixed
             countCartItem();
 
 
+    }
+
+    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    public void onMenuItemBack (MenuItemBack event)
+    {
+        menuClickId = -1;
+        if(getSupportFragmentManager().getBackStackEntryCount() > 0)
+            getSupportFragmentManager().popBackStack();
+        //navController.popBackStack(R.id.nav_home,true);
     }
 
 }

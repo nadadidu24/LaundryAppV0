@@ -74,7 +74,7 @@ public class ProviderActivity extends AppCompatActivity implements NavigationVie
 
         View headerView = navigationView.getHeaderView(0);
         TextView txt_user_provider = (TextView)headerView.findViewById(R.id.txt_user_provider);
-        providercommon.setSpanString("Hey","yoo",txt_user_provider,"!");
+        providercommon.setSpanString("Hey",Common.currentUser.getName(),txt_user_provider,"!");
         //providercommon.setSpanString("Hey",providercommon.currentLaundryProviderUser.getName(),txt_user_provider,"!");
 
     }

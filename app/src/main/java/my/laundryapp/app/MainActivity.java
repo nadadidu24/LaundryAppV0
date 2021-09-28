@@ -1,6 +1,7 @@
 package my.laundryapp.app;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,10 +11,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -38,21 +43,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @SuppressWarnings("DEPRECATION")
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-       
-
-
-
-
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insetsController = getWindow().getInsetsController();
+            if (insetsController != null) {
+                insetsController.hide(WindowInsets.Type.statusBars());
+            }
+        } else {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+            );
+        }
 
         TextView appTitle = (TextView) findViewById(R.id.textView7);
-        Animation anim = new AlphaAnimation(0.0f,1.0f); //0.0 means Black and 1.0 means full opacity
+        Animation anim = new AlphaAnimation(0.0f, 1.0f); //0.0 means Black and 1.0 means full opacity
         anim.setDuration(1000);
         anim.setStartOffset(100);
         anim.setRepeatMode(Animation.REVERSE);
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-
+/*
                 Fauth = FirebaseAuth.getInstance();
                 if (Fauth.getCurrentUser() != null) {
                     if (Fauth.getCurrentUser().isEmailVerified()) {
@@ -135,22 +143,18 @@ public class MainActivity extends AppCompatActivity {
                         Fauth.signOut();
                     }
                 } else {
-                    Intent intent = new Intent(MainActivity.this, second.class);
-                    startActivity(intent);
-                    finish();
 
+ */
+                Intent intent = new Intent(MainActivity.this, providerRegister.class);
+                startActivity(intent);
+                finish();
+/*
                 }
 
+
+ */
             }
         }, 4000);
-
-
-
-
-
-
-
-
 
 
     }

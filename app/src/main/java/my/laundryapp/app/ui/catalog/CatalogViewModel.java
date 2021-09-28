@@ -40,7 +40,7 @@ public class CatalogViewModel extends ViewModel implements ICategoryCallbackList
 
     }
 
-    private void loadCategories() {
+    public void loadCategories() {
         List<CategoryModel> tempList = new ArrayList<>();
         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
         categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {

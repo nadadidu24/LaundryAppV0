@@ -1,12 +1,15 @@
 package my.laundryapp.app.Model;
 
 public class CustomerModel {
-    private String Capital,ConfirmPassword,Email,Name,Password,PhoneNumber,custUid;
+    private String Capital,ConfirmPassword,Email,Name,Password,PhoneNumber,custUid,Address;
+    private double lat,lng;
+
+
 
     public CustomerModel() {
     }
 
-    public CustomerModel(String capital, String confirmPassword, String email, String name, String password, String phoneNumber, String custUid) {
+    public CustomerModel(String capital, String confirmPassword, String email, String name, String password, String phoneNumber, String custUid, String address) {
         Capital = capital;
         ConfirmPassword = confirmPassword;
         Email = email;
@@ -14,6 +17,15 @@ public class CustomerModel {
         Password = password;
         PhoneNumber = phoneNumber;
         this.custUid = custUid;
+        Address = address;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
     }
 
     public String getCustUid() {
@@ -70,5 +82,21 @@ public class CustomerModel {
 
     public void setPhoneNumber(String phoneNumber) {
         PhoneNumber = phoneNumber;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 }
