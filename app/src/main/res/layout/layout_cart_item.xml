@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="3dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    android:layout_marginTop="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="6dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/img_cart"
-            android:scaleType="fitXY"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,11 +32,35 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/txt_services_name"
                     android:text="Cart"
+                    android:fontFamily="@font/mulliregular"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:textStyle="bold"
+                    android:textColor="#C1000000"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_services_size"
+                    android:text="Dobi Bag Size"
                     android:fontFamily="@font/mulilight"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:textSize="14sp"/>
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_services_addon"
+                    android:text="Addon"
+                    android:fontFamily="@font/mulilight"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -48,7 +71,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:textStyle="italic"
                     android:textColor="@color/blue"/>
 
@@ -63,7 +86,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="18dp"
-                app:backGroundColor="@color/colorAccent"
+                app:backGroundColor="@color/blue"
                 app:finalNumber="20"
                 app:initialNumber="1"
                 app:textColor="@color/white"

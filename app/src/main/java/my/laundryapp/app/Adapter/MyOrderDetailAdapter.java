@@ -46,8 +46,10 @@ public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdap
         //holder.txt_service_quantity.setText(new StringBuilder("Quantity:")
         // .append(cartItemList.get(position).getServicesQuantity()));
         holder.txt_service_name.setText(new StringBuilder().append(cartItemList.get(position).getServicesName()));
+
         //holder.txt_size.setText(new StringBuilder("Size: ").append(cartItemList.get(position).getServicesSize()));
         //holder.txt_service_add_on.setText(new StringBuilder("Addon service: ").append(cartItemList.get(position).getServicesAddon()));
+
 
         SizeModel sizeModel = gson.fromJson(cartItemList.get(position).getServicesSize(), new TypeToken<SizeModel>() {
         }.getType());
@@ -72,11 +74,6 @@ public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdap
             holder.txt_service_add_on.setVisibility(View.GONE);
 
 
-
-
-
-
-
     }
 
     @Override
@@ -92,7 +89,6 @@ public class MyOrderDetailAdapter extends RecyclerView.Adapter<MyOrderDetailAdap
         TextView txt_service_add_on;
         @BindView(R.id.txt_size)
         TextView txt_size;
-
 
 
         private Unbinder unbinder;

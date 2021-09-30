@@ -46,13 +46,17 @@ import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import my.laundryapp.app.Adapter.MyOrdersAdapter;
 import my.laundryapp.app.Callback.ILoadOrderCallbackListener;
 import my.laundryapp.app.Common.Common;
 import my.laundryapp.app.Common.MySwipeHelper;
+import my.laundryapp.app.Database.CartDataSource;
+import my.laundryapp.app.Database.CartDatabase;
 import my.laundryapp.app.Database.CartItem;
+import my.laundryapp.app.Database.LocalCartDataSource;
 import my.laundryapp.app.EventBus.CounterCardEvent;
 import my.laundryapp.app.Model.CustomerModel;
 import my.laundryapp.app.Model.Order;
@@ -70,6 +74,9 @@ public class ViewOrdersFragment extends Fragment implements ILoadOrderCallbackLi
     private String userCustID;
 
     //change
+
+    CartDataSource cartDataSource;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @BindView(R.id.recycler_orders)
     RecyclerView recycler_orders;
@@ -154,6 +161,7 @@ public class ViewOrdersFragment extends Fragment implements ILoadOrderCallbackLi
     }
 
     private void initViews(View root) {
+        cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(getContext()).cartDAO());
 
         listener = this;
 
@@ -309,6 +317,56 @@ public class ViewOrdersFragment extends Fragment implements ILoadOrderCallbackLi
 
 
                         }));
+
+                buf.add(new MyButton(getContext(), "Repeat Order", 30, 0, Color.parseColor("#5d4037"),
+                        pos -> {
+                            Order orderModel = ((MyOrdersAdapter) recycler_orders.getAdapter()).getItemAtPosition(pos);
+
+                            dialog.show(); //
+                            cartDataSource.cleanCart(Common.currentUser.getCustUid())
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new SingleObserver<Integer>() {
+                                        @Override
+                                        public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                                        }
+
+                                        @Override
+                                        public void onSuccess(@io.reactivex.annotations.NonNull Integer integer) {
+                                            //after clean,do this, add new
+                                            CartItem[] cartItems = orderModel
+                                                    .getCartItemList().toArray(new CartItem[orderModel.getCartItemList().size()]);
+                                            //insert new
+                                            compositeDisposable.add(cartDataSource.insertOrReplaceAll(cartItems)
+                                                    .subscribeOn(Schedulers.io())
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(() -> {
+                                                        dialog.dismiss();
+                                                        Toast.makeText(getContext(), "Add all item in order to cart success", Toast.LENGTH_SHORT).show();
+                                                        EventBus.getDefault().postSticky(new CounterCardEvent(true)); //count fab cart
+                                                    },throwable -> {
+                                                        dialog.dismiss();
+                                                        Toast.makeText(getContext(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    })
+
+                                            );
+
+                                        }
+
+                                        @Override
+                                        public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                                            dialog.dismiss();
+                                            Toast.makeText(getContext(), "Error"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+
+
+
+
+                        }));
+
             }
         };
     }
@@ -325,5 +383,11 @@ public class ViewOrdersFragment extends Fragment implements ILoadOrderCallbackLi
         dialog.dismiss();
         Toast.makeText(getContext(), "" + message, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
     }
 }

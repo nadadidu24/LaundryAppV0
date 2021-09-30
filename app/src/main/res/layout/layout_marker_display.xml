@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/txt_runner_name"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Runner name"
+        android:textColor="@color/grey1"
+        android:fontFamily="@font/mulliregular"/>
+
+    <TextView
+        android:id="@+id/txt_runner_info"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:text="Runner info"
+        android:textAlignment="textStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:ignore="RtlCompat"
+        android:textColor="@color/grey2"
+        android:fontFamily="@font/mulilight"/>
+
+
+</LinearLayout>

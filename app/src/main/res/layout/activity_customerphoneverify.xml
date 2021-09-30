@@ -87,7 +87,7 @@
             app:backgroundTint="@null"
             android:backgroundTint="@null"
             android:text="Resend"
-            android:textColor="@color/grey"
+            android:textColor="@color/grey3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -103,7 +103,7 @@
             android:layout_marginTop="15dp"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/grey"
+            android:textColor="@color/grey3"
             android:textSize="16dp" />
 
 

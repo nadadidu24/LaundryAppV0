@@ -1,14 +1,19 @@
 package my.laundryapp.app;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -33,17 +38,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import my.laundryapp.app.Common.Common;
+import my.laundryapp.app.Common.MyCustomMarkerAdapter;
 import my.laundryapp.app.Model.ShippingOrderModel;
 import my.laundryapp.app.Remote.IGoogleAPI;
 import my.laundryapp.app.Remote.RetrofitGoogleAPIClient;
@@ -69,6 +83,37 @@ public class TrackingOrderActivity extends FragmentActivity implements OnMapRead
 
     private boolean isInit = false;
 
+    @OnClick(R.id.btn_call)
+    void onCallClick(){
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse(new StringBuilder("tel: ").append(Common.currentShippingOrder.getRunnerPhone()).toString()));
+        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+        //Request permisson
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.CALL_PHONE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(TrackingOrderActivity.this, "You must enable this permission to call", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }).check();
+        return;
+        }
+
+        startActivity(intent);
+    }
+
+
     @Override
     protected void onStop() {
         compositeDisposable.clear();
@@ -79,6 +124,8 @@ public class TrackingOrderActivity extends FragmentActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking_order);
+
+        ButterKnife.bind(this);
 
         iGoogleAPI = RetrofitGoogleAPIClient.getInstance().create(IGoogleAPI.class);
 
@@ -102,6 +149,8 @@ public class TrackingOrderActivity extends FragmentActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        mMap.setInfoWindowAdapter(new MyCustomMarkerAdapter(getLayoutInflater()));
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -142,9 +191,15 @@ public class TrackingOrderActivity extends FragmentActivity implements OnMapRead
 
             shipperMarker = mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromBitmap(resized))
-                    .title(Common.currentShippingOrder.getRunnerName())
-                    .snippet(Common.currentShippingOrder.getRunnerPhone())
+                    .title(new StringBuilder("Shipper: ").append(Common.currentShippingOrder.getRunnerName()).toString())
+                    .snippet(new StringBuilder("Phone: ").append(Common.currentShippingOrder.getRunnerPhone())
+                    .append("\n")
+                    .append("Estimate Time Delivery: ")
+                    .append(Common.currentShippingOrder.getEstimateTime()).toString())
                     .position(locationShipper));
+
+            //Always show info
+            shipperMarker.showInfoWindow();
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationShipper, 18));
 

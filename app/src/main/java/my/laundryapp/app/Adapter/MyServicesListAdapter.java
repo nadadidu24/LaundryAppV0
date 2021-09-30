@@ -108,6 +108,8 @@ public class MyServicesListAdapter extends RecyclerView.Adapter<MyServicesListAd
                     cartItem.setCustUid(userProfile.getCustUid());
                     cartItem.setCustPhone(userProfile.getPhoneNumber());
 
+                    cartItem.setCategoryId(Common.categorySelected.getCatalog_id());
+
                     cartItem.setServicesId(foodModelList.get(position).getId());
                     cartItem.setServicesName(foodModelList.get(position).getName());
                     cartItem.setServicesImage(foodModelList.get(position).getImage());
@@ -118,6 +120,7 @@ public class MyServicesListAdapter extends RecyclerView.Adapter<MyServicesListAd
                     cartItem.setServicesSize("Default");
 
                     cartDataSource.getItemWithAllOptionsInCart(userProfile.getCustUid(),
+                            Common.categorySelected.getCatalog_id(),
                             cartItem.getServicesId(),
                             cartItem.getServicesSize(),
                             cartItem.getServicesAddon())

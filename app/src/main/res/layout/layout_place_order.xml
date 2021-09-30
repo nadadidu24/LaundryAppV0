@@ -106,7 +106,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grey" />
+                android:background="@color/grey3" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -140,7 +140,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grey" />
+                android:background="@color/grey3" />
 
 
             <TextView
@@ -175,7 +175,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grey" />
+                android:background="@color/grey3" />
 
 
             <com.google.android.material.textfield.TextInputLayout

@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -59,6 +60,10 @@ public class Common {
     public static final String NOTI_CONTENT = "content";
     public static final String USER_REFERENCES = "Customer" ;
     public static final String REQUEST_REFUND_MODEL = "RequestRefund";
+    public static final String IS_SUBSCRIBE_NEWS = "IS_SUBSCRIBE_NEWS";
+    public static final String NEWS_TOPIC = "news";
+    public static final String IS_SEND_IMAGE = "IS_SEND_IMAGE" ;
+    public static final String IMAGE_URL = "IMAGE_URL" ;
     private static final String TOKEN_REF ="Tokens" ;
     public static final String SHIPPING_ORDER_REF = "ShippingOrder";
     public static CategoryModel categorySelected;
@@ -270,5 +275,65 @@ public class Common {
 
         }
         return poly;
+    }
+
+    public static String getListAddon(List<AddonModel> addonModels) {
+
+
+        StringBuilder result = new StringBuilder();
+        for(AddonModel addonModel:addonModels)
+        {
+            result.append(addonModel.getName()).append(",");
+        }
+
+        return result.substring(0,result.length()-1); //remove last","
+    }
+
+    public static LaundryServicesModel findFoodInListById(CategoryModel categoryModel, String servicesId) {
+    if(categoryModel.getServices() != null && categoryModel.getServices().size() > 0)
+    {
+        for (LaundryServicesModel laundryServicesModel:categoryModel.getServices())
+            if (laundryServicesModel.getId().equals(servicesId))
+                return laundryServicesModel;
+            return null;
+
+    }
+    else
+        return null;
+    }
+
+    public static void showNotificationBigStyle(Context context, int id, String title, String content, Bitmap bitmap, Intent intent) {
+
+        PendingIntent pendingIntent = null;
+        if(intent != null)
+            pendingIntent = PendingIntent.getActivity(context,id,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        String NOTIFICATION_CHANNEL_ID = "edmt_dev_eat_v2";
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.O)
+        {
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+                    "Eat It V2", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription("Eat It V2");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setVibrationPattern(new long[]{0,1000,500,1000});
+            notificationChannel.enableVibration(true);
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,NOTIFICATION_CHANNEL_ID);
+        builder.setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(bitmap)
+                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap));
+
+
+        if(pendingIntent != null)
+            builder.setContentIntent(pendingIntent);
+        Notification notification = builder.build();
+        notificationManager.notify(id,notification);
+
     }
 }

@@ -38,7 +38,7 @@ public interface CartDataSource {
 
     Single<Integer> cleanCart(String custUid);
 
-    Single<CartItem> getItemWithAllOptionsInCart( String custUid,String servicesId,String servicesSize,String servicesAddon);
+    Single<CartItem> getItemWithAllOptionsInCart( String custUid,String categoryId, String servicesId,String servicesSize,String servicesAddon);
 
 
 

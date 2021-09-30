@@ -309,7 +309,7 @@ public class providerRegister extends AppCompatActivity {
         buttonOK.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         Button buttonNo = resgisterDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        buttonNo.setTextColor(ContextCompat.getColor(this, R.color.grey));
+        buttonNo.setTextColor(ContextCompat.getColor(this, R.color.grey3));
 
     }
 

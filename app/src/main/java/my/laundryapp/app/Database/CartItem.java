@@ -8,9 +8,13 @@ import androidx.room.PrimaryKey;
 
 
 
-@Entity(tableName = "Cart",primaryKeys = {"custUid","servicesId","servicesAddon","servicesSize"})
+@Entity(tableName = "Cart",primaryKeys = {"custUid","categoryId","servicesId","servicesAddon","servicesSize"})
 
 public class CartItem {
+
+    @NonNull
+    @ColumnInfo(name = "categoryId")
+    private String categoryId;
 
     @NonNull
     @ColumnInfo(name = "servicesId")
@@ -126,6 +130,15 @@ public class CartItem {
 
     public void setCustUid(@NonNull String custUid) {
         this.custUid = custUid;
+    }
+
+    @NonNull
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(@NonNull String categoryId) {
+        this.categoryId = categoryId;
     }
 
     //Ctrl + o

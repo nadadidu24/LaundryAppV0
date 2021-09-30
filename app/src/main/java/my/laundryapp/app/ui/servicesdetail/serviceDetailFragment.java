@@ -154,6 +154,8 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
                 cartItem.setCustUid(userProfile.getCustUid());
                 cartItem.setCustPhone(userProfile.getPhoneNumber());
 
+                cartItem.setCategoryId(Common.categorySelected.getCatalog_id());
+
                 cartItem.setServicesId(Common.selectedService.getId());
                 cartItem.setServicesName(Common.selectedService.getName());
                 cartItem.setServicesImage(Common.selectedService.getImage());
@@ -171,6 +173,7 @@ public class serviceDetailFragment extends Fragment implements TextWatcher {
                     cartItem.setServicesSize("Default");
 
                 cartDataSource.getItemWithAllOptionsInCart(userProfile.getCustUid(),
+                        Common.categorySelected.getCatalog_id(),
                         cartItem.getServicesId(),
                         cartItem.getServicesSize(),
                         cartItem.getServicesAddon())

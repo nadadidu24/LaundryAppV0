@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
 
             android:text="Get all your laundry needs \nin one app"
-            android:textColor="@color/grey"
+            android:textColor="@color/grey3"
             android:textSize="16sp" />
     </LinearLayout>
 

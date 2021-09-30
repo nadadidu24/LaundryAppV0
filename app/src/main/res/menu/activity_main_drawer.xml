@@ -9,7 +9,15 @@
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/menu_home" />
 
-        </group>
+    </group>
+
+    <group android:id="@+id/news_group">
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_baseline_mail_24"
+            android:title="@string/menu_subscribe_news" />
+
+    </group>
     <group android:id="@+id/sevices_group">
         <item
             android:id="@+id/nav_catalog"
@@ -18,13 +26,12 @@
     </group>
 
 
-
     <group android:id="@+id/cart_group">
         <item
             android:id="@+id/nav_cart"
             android:icon="@drawable/ic_baseline_local_mall_24"
             android:title="@string/menu_cart" />
-        </group>
+    </group>
 
     <group android:id="@+id/view_orders_group">
         <item
@@ -33,7 +40,7 @@
             android:title="@string/menu_services_list_order" />
     </group>
 
-    <group >
+    <group>
         <item
             android:id="@+id/nav_update_info"
             android:icon="@drawable/ic_baseline_manage_accounts_24"
@@ -46,8 +53,6 @@
             android:icon="@drawable/ic_baseline_exit_to_app_24"
             android:title="@string/sign_out" />
     </group>
-
-
 
 
 </menu>

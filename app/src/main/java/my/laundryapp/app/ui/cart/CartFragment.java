@@ -2,19 +2,17 @@ package my.laundryapp.app.ui.cart;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -27,8 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Looper;
 import android.os.Parcelable;
-import android.telecom.TelecomManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +38,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,14 +51,14 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,6 +66,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,6 +75,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,17 +87,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import my.laundryapp.app.Adapter.MyCartAdapter;
 import my.laundryapp.app.Callback.ILoadTimeFromFirebaseListener;
+import my.laundryapp.app.Callback.ISearchCategoryCallbackListener;
 import my.laundryapp.app.Common.Common;
 import my.laundryapp.app.Common.MySwipeHelper;
 import my.laundryapp.app.Database.CartDataSource;
@@ -102,25 +107,24 @@ import my.laundryapp.app.EventBus.CounterCardEvent;
 import my.laundryapp.app.EventBus.HideFABCart;
 import my.laundryapp.app.EventBus.MenuItemBack;
 import my.laundryapp.app.EventBus.UpdateItemInCart;
-import my.laundryapp.app.Main4Activity;
+import my.laundryapp.app.Model.AddonModel;
+import my.laundryapp.app.Model.CategoryModel;
 import my.laundryapp.app.Model.CustomerModel;
-import my.laundryapp.app.Model.FCMResponse;
 import my.laundryapp.app.Model.FCMSendData;
+import my.laundryapp.app.Model.LaundryServicesModel;
 import my.laundryapp.app.Model.Order;
+import my.laundryapp.app.Model.SizeModel;
 import my.laundryapp.app.R;
 import my.laundryapp.app.Remote.IFCMService;
 import my.laundryapp.app.Remote.RetrofitFCMClient;
-import my.laundryapp.app.accountmenu;
 import my.laundryapp.app.braintree;
-import my.laundryapp.app.customerregister;
-import my.laundryapp.app.providerregisternew;
-import my.laundryapp.app.second;
-import my.laundryapp.app.ui.cart.CartViewModel;
-import my.laundryapp.app.usermenu;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListener, ISearchCategoryCallbackListener, TextWatcher {
+    private BottomSheetDialog addonBottonSheetDialog;
+    private ChipGroup chip_group_addon, chip_group_user_selected_addon;
+    private EditText edt_search;
 
-public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListener {
+    private ISearchCategoryCallbackListener searchServiceCallbackListener;
 
     private Place placeSelected;
     private AutocompleteSupportFragment place_fragment;
@@ -168,7 +172,6 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_place_order, null);
 
 
-
         //EditText edt_address = (EditText) view.findViewById(R.id.edt_address);
         EditText edt_comment = (EditText) view.findViewById(R.id.edt_comment);
         TextView txt_address = (TextView) view.findViewById(R.id.txt_address_detail);
@@ -178,7 +181,7 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
         RadioButton rdi_cod = (RadioButton) view.findViewById(R.id.rdi_ood);
         RadioButton rdi_braintree = (RadioButton) view.findViewById(R.id.rdi_braintree);
 
-        place_fragment = (AutocompleteSupportFragment)getActivity().getSupportFragmentManager()
+        place_fragment = (AutocompleteSupportFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.places_autocomplete_fragment);
         place_fragment.setPlaceFields(placeFields);
         place_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -191,7 +194,7 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
 
             @Override
             public void onError(@NonNull Status status) {
-                Toast.makeText(getContext(), ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "" + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -275,7 +278,7 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
 
                                 @Override
                                 public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                                   // edt_address.setText(coordinates);
+                                    // edt_address.setText(coordinates);
                                     txt_address.setText(e.getMessage());
                                     txt_address.setVisibility(View.VISIBLE);
                                 }
@@ -312,7 +315,7 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
         buttonOK.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
         Button buttonNo = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        buttonNo.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+        buttonNo.setTextColor(ContextCompat.getColor(getContext(), R.color.grey3));
 
         //AlertDialog button = dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.black));
 
@@ -320,16 +323,14 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
 
     private String getAddressFromLatLng(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        String result="";
+        String result = "";
         try {
-            List<Address> addressList = geocoder.getFromLocation(latitude,longitude,1);
-            if(addressList != null && addressList.size() > 0)
-            {
+            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
                 Address address = addressList.get(0); //always get first item
                 StringBuilder sb = new StringBuilder(address.getAddressLine(0));
                 result = sb.toString();
-            }
-            else
+            } else
                 result = "Adress not found";
         } catch (IOException e) {
             e.printStackTrace();
@@ -453,13 +454,10 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
                                             order.setComment(comment);
 
                                             //newly added
-                                            if(currentLocation != null)
-                                            {
+                                            if (currentLocation != null) {
                                                 order.setLat(currentLocation.getLatitude());
                                                 order.setLng(currentLocation.getLongitude());
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 //ada if actually
                                                 order.setLat(-0.1f);
                                                 order.setLng(-0.1f);
@@ -749,6 +747,8 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
     }
 
     private void InitViews() {
+
+        searchServiceCallbackListener = this;
         initPlaceClient();
 
         setHasOptionsMenu(true);
@@ -797,15 +797,82 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
 
 
                         }));
+
+                buf.add(new MyButton(getContext(), "Update", 30, 0, Color.parseColor("#5D4037"),
+                        pos -> {
+                            Toast.makeText(getContext(), "update item Click!", Toast.LENGTH_SHORT).show();
+
+                            CartItem cartItem = adapter.getItemAtPosition(pos);
+                            FirebaseDatabase.getInstance()
+                                    .getReference(Common.CATEGORY_REF)
+                                    .child(cartItem.getCategoryId())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                            if (snapshot.exists()) {
+                                                Toast.makeText(getContext(), "update snap exist", Toast.LENGTH_SHORT).show();
+                                                CategoryModel categoryModel = snapshot.getValue(CategoryModel.class);
+                                                searchServiceCallbackListener.onSearchCategoryFound(categoryModel, cartItem);
+
+                                            } else {
+                                                searchServiceCallbackListener.onSearchCategoryNotFound("Laundry service not available");
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            searchServiceCallbackListener.onSearchCategoryNotFound(error.getMessage());
+
+                                        }
+                                    });
+
+
+                        }));
             }
         };
 
         sumAllItemInCart();
 
+        //addon
+        addonBottonSheetDialog = new BottomSheetDialog(getContext(), R.style.DialogStyle);
+        View layout_addon_display = getLayoutInflater().inflate(R.layout.layout_addon_display, null);
+        chip_group_addon = (ChipGroup) layout_addon_display.findViewById(R.id.chip_group_addon);
+        edt_search = (EditText) layout_addon_display.findViewById(R.id.edt_search);
+        addonBottonSheetDialog.setContentView(layout_addon_display);
+
+        addonBottonSheetDialog.setOnDismissListener(dialog -> {
+            displayCustSelectedAddon(chip_group_user_selected_addon);
+            calculateTotalPrice();
+        });
+
+    }
+
+    private void displayCustSelectedAddon(ChipGroup chip_group_user_selected_addon) {
+        if (Common.selectedService.getUserSelectedAddon() != null && Common.selectedService.getUserSelectedAddon().size() > 0) {
+            chip_group_user_selected_addon.removeAllViews();
+            for (AddonModel addonModel : Common.selectedService.getUserSelectedAddon()) {
+                Chip chip = (Chip) getLayoutInflater().inflate(R.layout.layout_chip_with_delete_icon, null);
+                chip.setText(new StringBuilder(addonModel.getName()).append("(+RM")
+                        .append(addonModel.getPrice()).append(")"));
+                chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        if (Common.selectedService.getUserSelectedAddon() == null)
+                            Common.selectedService.setUserSelectedAddon(new ArrayList<>());
+                        Common.selectedService.getUserSelectedAddon().add(addonModel);
+                    }
+                });
+                chip_group_user_selected_addon.addView(chip);
+            }
+        } else
+            chip_group_user_selected_addon.removeAllViews();
+
     }
 
     private void initPlaceClient() {
-        Places.initialize(getContext(),getString(R.string.google_maps_key));
+        Places.initialize(getContext(), getString(R.string.google_maps_key));
         placesClient = Places.createClient(getContext());
     }
 
@@ -1085,4 +1152,272 @@ public class CartFragment extends Fragment implements ILoadTimeFromFirebaseListe
         EventBus.getDefault().postSticky(new MenuItemBack());
         super.onDestroy();
     }
+
+
+    @Override
+    public void onSearchCategoryFound(CategoryModel categoryModel, CartItem cartItem) {
+        LaundryServicesModel laundryServicesModel = Common.findFoodInListById(categoryModel, cartItem.getServicesId());
+        if (laundryServicesModel != null) {
+            Toast.makeText(getContext(), "laundryServicesModel != null", Toast.LENGTH_SHORT).show();
+
+            showUpdateDialog(cartItem, laundryServicesModel);
+        } else
+            Toast.makeText(getContext(), "Service ID not found", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onSearchCategoryNotFound(String message) {
+        Toast.makeText(getContext(), "tak dak" + message, Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void showUpdateDialog(CartItem cartItem, LaundryServicesModel laundryServicesModel) {
+        Toast.makeText(getContext(), "show update dialog", Toast.LENGTH_SHORT).show();
+
+        Common.selectedService = laundryServicesModel;
+        androidx.appcompat.app.AlertDialog.Builder builder1 = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.layout_dialog_update_cart, null);
+        builder1.setView(itemView);
+
+
+        //view
+        Button btn_ok = (Button) itemView.findViewById(R.id.btn_ok);
+        Button btn_cancel = (Button) itemView.findViewById(R.id.btn_cancel);
+
+        RadioGroup rdi_group_size = (RadioGroup) itemView.findViewById(R.id.rdi_group_size);
+        chip_group_user_selected_addon = (ChipGroup) itemView.findViewById(R.id.chip_group_user_selected_addon);
+        ImageView img_add_on = (ImageView) itemView.findViewById(R.id.img_add_addon);
+        img_add_on.setOnClickListener(v -> {
+            if (laundryServicesModel.getAddon() != null) {
+                displayAddonList();
+                addonBottonSheetDialog.show();
+            }
+        });
+
+
+            //size
+            if (laundryServicesModel.getSize() != null) {
+                for (SizeModel sizeModel : laundryServicesModel.getSize()) {
+                    RadioButton radioButton = new RadioButton(getContext());
+                    radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        if (isChecked)
+                            Common.selectedService.setUserSelectedSize(sizeModel);
+                        calculateTotalPrice();
+                    });
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
+                    radioButton.setLayoutParams(params);
+                    radioButton.setText(sizeModel.getName());
+                    radioButton.setTag(sizeModel.getPrice());
+
+                    rdi_group_size.addView(radioButton);
+
+                }
+
+                if (rdi_group_size.getChildCount() > 0) {
+                    RadioButton radioButton = (RadioButton) rdi_group_size.getChildAt(0); //get first radio button
+                    radioButton.setChecked(true); //first redio nutton set as defgault
+                }
+
+            }
+            else{
+                Toast.makeText(getContext(), "ni tak dak", Toast.LENGTH_SHORT).show();
+            }
+
+            //addon
+            displayAlreadySelectedAddon(chip_group_user_selected_addon, cartItem);
+
+            //show dialog
+            androidx.appcompat.app.AlertDialog dialog1 = builder1.create();
+            dialog1.show();
+            //customize dialog design
+            dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog1.getWindow().setGravity(Gravity.CENTER);
+
+            //event
+            btn_ok.setOnClickListener(v1 -> {
+                //first ,delete item in cart
+                cartDataSource.deleteCartItems(cartItem)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new SingleObserver<Integer>() {
+                            @Override
+                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(@io.reactivex.annotations.NonNull Integer integer) {
+
+                                //second,update in and add new updated info
+
+                                //select when user edit something
+                                if (Common.selectedService.getUserSelectedAddon() != null)
+                                    cartItem.setServicesAddon(new Gson().toJson(Common.selectedService.getUserSelectedAddon()));
+                                else
+                                    cartItem.setServicesAddon("Default");
+                                if (Common.selectedService.getUserSelectedSize() != null)
+                                    cartItem.setServicesSize(new Gson().toJson(Common.selectedService.getUserSelectedSize()));
+                                else
+                                    cartItem.setServicesSize("Default");
+
+                                cartItem.setServicesExtraPrice(Common.calculateExtraPrice(Common.selectedService.getUserSelectedSize(),
+                                        Common.selectedService.getUserSelectedAddon()));
+
+                                //then insert all
+                                compositeDisposable.add(cartDataSource.insertOrReplaceAll(cartItem)
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(() -> {
+                                            EventBus.getDefault().postSticky(new CounterCardEvent(true)); //count cart again
+                                            calculateTotalPrice();
+                                            dialog1.dismiss();
+                                            Toast.makeText(getContext(), "Update Cart Success", Toast.LENGTH_SHORT).show();
+                                        }, throwable -> {
+                                            Toast.makeText(getContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                        })
+                                );
+
+
+                            }
+
+                            @Override
+                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+            });
+
+            btn_cancel.setOnClickListener(v12 -> {
+                dialog1.dismiss();
+            });
+
+
+
+    }
+
+    private void displayAlreadySelectedAddon(ChipGroup chip_group_user_selected_addon, CartItem cartItem) {
+        //this methid diaplay all addon that already selected before add to cart and display on layout
+        if (cartItem.getServicesAddon() != null && !cartItem.getServicesAddon().equals("Default")) {
+            List<AddonModel> addonModels = new Gson().fromJson(
+                    cartItem.getServicesAddon(), new TypeToken<List<AddonModel>>() {
+                    }.getType());
+            Common.selectedService.setUserSelectedAddon(addonModels);
+            chip_group_user_selected_addon.removeAllViews();
+            //add all view
+            for (AddonModel addonModel : addonModels) {
+                Chip chip = (Chip) getLayoutInflater().inflate(R.layout.layout_chip_with_delete_icon, null);
+                chip.setText(new StringBuilder(addonModel.getName()).append("(+RM")
+                        .append(addonModel.getPrice()).append(")"));
+                chip.setClickable(false);
+                chip.setOnCloseIconClickListener(v -> {
+                    //remove when user select delet
+                    chip_group_user_selected_addon.removeView(v);
+                    Common.selectedService.getUserSelectedAddon().remove(addonModel);
+                    calculateTotalPrice();
+                });
+                chip_group_user_selected_addon.addView(chip);
+            }
+
+        }
+    }
+
+    private void displayAddonList() {
+        if (Common.selectedService.getAddon() != null && Common.selectedService.getAddon().size() > 0) {
+            chip_group_addon.clearCheck();
+            chip_group_addon.removeAllViews();
+
+            edt_search.addTextChangedListener(this);
+
+            //add all view
+            for (AddonModel addonModel : Common.selectedService.getAddon()) {
+                Chip chip = (Chip) getLayoutInflater().inflate(R.layout.layout_addon_item, null);
+                chip.setText(new StringBuilder(addonModel.getName()).append("(+RM")
+                        .append(addonModel.getPrice()).append(")"));
+                chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        if (Common.selectedService.getUserSelectedAddon() == null)
+                            Common.selectedService.setUserSelectedAddon(new ArrayList<>());
+                        Common.selectedService.getUserSelectedAddon().add(addonModel);
+                    }
+                });
+                chip_group_addon.addView(chip);
+            }
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        chip_group_addon.clearCheck();
+        chip_group_addon.removeAllViews();
+        for (AddonModel addonModel : Common.selectedService.getAddon()) {
+            if (addonModel.getName().toLowerCase().contains(s.toString().toLowerCase())) {
+                Chip chip = (Chip) getLayoutInflater().inflate(R.layout.layout_addon_item, null);
+                chip.setText(new StringBuilder(addonModel.getName()).append("(+RM")
+                        .append(addonModel.getPrice()).append(")"));
+                chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        if (Common.selectedService.getUserSelectedAddon() == null)
+                            Common.selectedService.setUserSelectedAddon(new ArrayList<>());
+                        Common.selectedService.getUserSelectedAddon().add(addonModel);
+                    }
+                });
+                chip_group_addon.addView(chip);
+            }
+        }
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+    /*
+    @Override
+    public void onSearchCategoryNotFound(String message) {
+        Toast.makeText(getContext(), "tak dak" + message, Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        chip_group_addon.clearCheck();
+        chip_group_addon.removeAllViews();
+        for (AddonModel addonModel : Common.selectedService.getAddon()) {
+            if (addonModel.getName().toLowerCase().contains(s.toString().toLowerCase())) {
+                Chip chip = (Chip) getLayoutInflater().inflate(R.layout.layout_addon_item, null);
+                chip.setText(new StringBuilder(addonModel.getName()).append("(+RM")
+                        .append(addonModel.getPrice()).append(")"));
+                chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        if (Common.selectedService.getUserSelectedAddon() == null)
+                            Common.selectedService.setUserSelectedAddon(new ArrayList<>());
+                        Common.selectedService.getUserSelectedAddon().add(addonModel);
+                    }
+                });
+                chip_group_addon.addView(chip);
+            }
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+     */
 }

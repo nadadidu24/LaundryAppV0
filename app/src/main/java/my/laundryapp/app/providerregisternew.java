@@ -224,7 +224,7 @@ public class providerregisternew extends AppCompatActivity {
                                                                 buttonOK.setTextColor(ContextCompat.getColor(providerregisternew.this, R.color.colorPrimary));
 
                                                                 Button buttonNo = dialog1.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                                                buttonNo.setTextColor(ContextCompat.getColor(providerregisternew.this, R.color.grey));
+                                                                buttonNo.setTextColor(ContextCompat.getColor(providerregisternew.this, R.color.grey3));
 
 
 
@@ -243,7 +243,7 @@ public class providerregisternew extends AppCompatActivity {
                                                             buttonOK.setTextColor(ContextCompat.getColor(providerregisternew.this, R.color.colorPrimary));
 
                                                             Button buttonNo = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                                            buttonNo.setTextColor(ContextCompat.getColor(providerregisternew.this, R.color.grey));
+                                                            buttonNo.setTextColor(ContextCompat.getColor(providerregisternew.this, R.color.grey3));
 
                                                             /*
                                                             builder.setMessage("Registered successfully!\nPlease verify your email");

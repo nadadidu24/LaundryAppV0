@@ -47,7 +47,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/mulilight"
                 android:text="Add your details to sign up"
-                android:textColor="@color/grey"
+                android:textColor="@color/grey3"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

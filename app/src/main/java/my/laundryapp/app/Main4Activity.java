@@ -16,6 +16,7 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,6 +74,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dmax.dialog.SpotsDialog;
+import io.paperdb.Paper;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -110,7 +113,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
     android.app.AlertDialog dialog;
 
-    int menuClickId=1;
+    int menuClickId = 1;
 
     //change
     private FirebaseUser user;
@@ -160,7 +163,6 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(this).cartDAO());
 
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -174,11 +176,11 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             }
         });
         drawer = findViewById(R.id.drawer_layout);
-         navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_catalog, R.id.nav_services_list, R.id.nav_service_detail1, R.id.nav_cart,R.id.nav_view_orders)
+                R.id.nav_home, R.id.nav_catalog, R.id.nav_services_list, R.id.nav_service_detail1, R.id.nav_cart, R.id.nav_view_orders)
                 .setOpenableLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -186,9 +188,8 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         NavigationUI.setupWithNavController(navigationView, navController);
         /* i tambah bawah ni
          */
-navigationView.setNavigationItemSelectedListener(this);
-navigationView.bringToFront(); //fixed
-
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.bringToFront(); //fixed
 
 
         userNameInBar();
@@ -199,35 +200,36 @@ navigationView.bringToFront(); //fixed
     }
 
     private void initPlaceClient() {
-        Places.initialize(this,getString(R.string.google_maps_key));
-        placesClient = Places.createClient(this);    }
+        Places.initialize(this, getString(R.string.google_maps_key));
+        placesClient = Places.createClient(this);
+    }
 
     private void centerTitle() {
         ArrayList<View> textViews = new ArrayList<>();
 
         getWindow().getDecorView().findViewsWithText(textViews, getTitle(), View.FIND_VIEWS_WITH_TEXT);
 
-        if(textViews.size() > 0) {
+        if (textViews.size() > 0) {
             AppCompatTextView appCompatTextView = null;
-            if(textViews.size() == 1) {
+            if (textViews.size() == 1) {
                 appCompatTextView = (AppCompatTextView) textViews.get(0);
             } else {
-                for(View v : textViews) {
-                    if(v.getParent() instanceof Toolbar) {
+                for (View v : textViews) {
+                    if (v.getParent() instanceof Toolbar) {
                         appCompatTextView = (AppCompatTextView) v;
                         break;
                     }
                 }
             }
 
-            if(appCompatTextView != null) {
+            if (appCompatTextView != null) {
                 ViewGroup.LayoutParams params = appCompatTextView.getLayoutParams();
                 params.width = ViewGroup.LayoutParams.MATCH_PARENT;
 
                 appCompatTextView.setLayoutParams(params);
                 //appCompatTextView.setTextColor(getResources().getColor(R.color.greyblack));
                 appCompatTextView.setTypeface(ResourcesCompat.getFont(this, R.font.mulliregular));
-                appCompatTextView.setPadding(0,0,50,0);
+                appCompatTextView.setPadding(0, 0, 50, 0);
                 appCompatTextView.setGravity(Gravity.CENTER);
                 appCompatTextView.setGravity(Gravity.CENTER_HORIZONTAL);
 
@@ -250,7 +252,7 @@ navigationView.bringToFront(); //fixed
 
                 View headerView = navigationView.getHeaderView(0);
                 TextView txt_user = (TextView) headerView.findViewById(R.id.txt_user);
-                Common.setSpanString("Hi ",userProfile.getName(),txt_user,"!");
+                Common.setSpanString("Hi ", userProfile.getName(), txt_user, "!");
 
 
             }
@@ -280,37 +282,77 @@ navigationView.bringToFront(); //fixed
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
-        drawer.closeDrawers ();
-        switch (item.getItemId())
-        {
+        drawer.closeDrawers();
+        switch (item.getItemId()) {
             case R.id.nav_home:
-                if(item.getItemId() != menuClickId)
+                if (item.getItemId() != menuClickId)
                     navController.navigate(R.id.nav_home);
                 break;
             case R.id.nav_catalog:
-                if(item.getItemId() != menuClickId)
+                if (item.getItemId() != menuClickId)
                     navController.navigate(R.id.nav_catalog);
                 break;
             case R.id.nav_sign_out:
 
-                    signOut();
+                signOut();
+                break;
+            case R.id.nav_news:
+
+                showSubscribeNews();
                 break;
             case R.id.nav_update_info:
 
                 showUpdateInfoDialogue();
                 break;
             case R.id.nav_cart:
-                if(item.getItemId() != menuClickId)
+                if (item.getItemId() != menuClickId)
                     navController.navigate(R.id.nav_cart);
                 break;
             case R.id.nav_view_orders:
-                if(item.getItemId() != menuClickId)
+                if (item.getItemId() != menuClickId)
                     navController.navigate(R.id.nav_view_orders);
                 break;
 
         }
         menuClickId = item.getItemId();
         return true;
+    }
+
+    private void showSubscribeNews() {
+        Paper.init(this);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("News System");
+        builder.setMessage("Do you want to subscribe news?");
+
+        View itemView = LayoutInflater.from(this).inflate(R.layout.layout_subscribe_news, null);
+        CheckBox ckb_news = (CheckBox) itemView.findViewById(R.id.ckb_subscribe_news);
+        boolean isSubscribeNews = Paper.book().read(Common.IS_SUBSCRIBE_NEWS, false);
+        if (isSubscribeNews)
+            ckb_news.setChecked(true);
+        builder.setNegativeButton("CANCEL", (dialog, which) -> {
+            dialog.dismiss();
+        }).setPositiveButton("SEND", (dialog, which) -> {
+            if(ckb_news.isChecked())
+            {
+                Paper.book().write(Common.IS_SUBSCRIBE_NEWS,true);
+                FirebaseMessaging.getInstance()
+                        .subscribeToTopic(Common.NEWS_TOPIC)
+                        .addOnFailureListener(e -> Toast.makeText(Main4Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show())
+                        .addOnSuccessListener(aVoid -> Toast.makeText(Main4Activity.this, "Subscribe success", Toast.LENGTH_SHORT).show());
+            }
+            else
+            {
+                Paper.book().delete(Common.IS_SUBSCRIBE_NEWS);
+                FirebaseMessaging.getInstance()
+                        .unsubscribeFromTopic(Common.NEWS_TOPIC)
+                        .addOnFailureListener(e -> Toast.makeText(Main4Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show())
+                        .addOnSuccessListener(aVoid -> Toast.makeText(Main4Activity.this, "Unsubscribe success", Toast.LENGTH_SHORT).show());
+            }
+
+        });
+        builder.setView(itemView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showUpdateInfoDialogue() {
@@ -330,7 +372,7 @@ navigationView.bringToFront(); //fixed
         edt_name.requestFocusFromTouch();
         edt_name.clearFocus();
 
-        place_fragment = (AutocompleteSupportFragment)getSupportFragmentManager()
+        place_fragment = (AutocompleteSupportFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.places_autocomplete_fragment);
         place_fragment.setPlaceFields(placeFields);
         place_fragment.setHint("Home");
@@ -344,7 +386,7 @@ navigationView.bringToFront(); //fixed
 
             @Override
             public void onError(@NonNull Status status) {
-                Toast.makeText(Main4Activity.this, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main4Activity.this, "" + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -357,49 +399,46 @@ navigationView.bringToFront(); //fixed
             dialog.dismiss();
         })
                 .setPositiveButton("UPDATE", (dialog, which) -> {
-                   if(placeSelected != null)
-                   {
-                       if (TextUtils.isEmpty(edt_name.getText().toString())) {
-                           Toast.makeText(Main4Activity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
-                           return;
-                       }
+                    if (placeSelected != null) {
+                        if (TextUtils.isEmpty(edt_name.getText().toString())) {
+                            Toast.makeText(Main4Activity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                       Map<String,Object> update_data = new HashMap<>();
-                       update_data.put("name",edt_name.getText().toString());
-                       update_data.put("address",txt_address_detail.getText().toString());
-                       update_data.put("lat",placeSelected.getLatLng().latitude);
-                       update_data.put("lng",placeSelected.getLatLng().longitude);
-                       
-                       FirebaseDatabase.getInstance()
-                               .getReference(Common.USER_REFERENCES)
-                               .child(Common.currentUser.getCustUid())
-                               .updateChildren(update_data)
-                               .addOnFailureListener(new OnFailureListener() {
-                                   @Override
-                                   public void onFailure(@NonNull Exception e) {
-                                       dialog.dismiss();
-                                       Toast.makeText(Main4Activity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                       
-                                   }
-                               })
-                               .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                   @Override
-                                   public void onSuccess(Void aVoid) {
-                                       dialog.dismiss();
-                                       Toast.makeText(Main4Activity.this, "Update info success", Toast.LENGTH_SHORT).show();
-                                       Common.currentUser.setName(update_data.get("name").toString());
-                                       Common.currentUser.setAddress(update_data.get("address").toString());
-                                       Common.currentUser.setLat(Double.parseDouble(update_data.get("lat").toString()));
-                                       Common.currentUser.setLng(Double.parseDouble(update_data.get("lng").toString()));
-                                   }
-                               });
+                        Map<String, Object> update_data = new HashMap<>();
+                        update_data.put("name", edt_name.getText().toString());
+                        update_data.put("address", txt_address_detail.getText().toString());
+                        update_data.put("lat", placeSelected.getLatLng().latitude);
+                        update_data.put("lng", placeSelected.getLatLng().longitude);
 
-                   }
-                   else
-                   {
-                       Toast.makeText(Main4Activity.this, "Please select address", Toast.LENGTH_SHORT).show();
+                        FirebaseDatabase.getInstance()
+                                .getReference(Common.USER_REFERENCES)
+                                .child(Common.currentUser.getCustUid())
+                                .updateChildren(update_data)
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        dialog.dismiss();
+                                        Toast.makeText(Main4Activity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
 
-                   }
+                                    }
+                                })
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        dialog.dismiss();
+                                        Toast.makeText(Main4Activity.this, "Update info success", Toast.LENGTH_SHORT).show();
+                                        Common.currentUser.setName(update_data.get("name").toString());
+                                        Common.currentUser.setAddress(update_data.get("address").toString());
+                                        Common.currentUser.setLat(Double.parseDouble(update_data.get("lat").toString()));
+                                        Common.currentUser.setLng(Double.parseDouble(update_data.get("lng").toString()));
+                                    }
+                                });
+
+                    } else {
+                        Toast.makeText(Main4Activity.this, "Please select address", Toast.LENGTH_SHORT).show();
+
+                    }
 
                 });
 
@@ -408,7 +447,7 @@ navigationView.bringToFront(); //fixed
 
         androidx.appcompat.app.AlertDialog resgisterDialog = builder.create();
         resgisterDialog.setOnDismissListener(dialog -> {
-            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.remove(place_fragment);
             fragmentTransaction.commit();
 
@@ -419,7 +458,7 @@ navigationView.bringToFront(); //fixed
         buttonOK.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         Button buttonNo = resgisterDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        buttonNo.setTextColor(ContextCompat.getColor(this, R.color.grey));
+        buttonNo.setTextColor(ContextCompat.getColor(this, R.color.grey3));
     }
 
     //eventbus
@@ -437,52 +476,41 @@ navigationView.bringToFront(); //fixed
         super.onStop();
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onCategorySelected (CategoryClick event)
-    {
-        if(event.isSuccess())
-        {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onCategorySelected(CategoryClick event) {
+        if (event.isSuccess()) {
             navController.navigate(R.id.nav_services_list);
             //Toast.makeText(this,"Click to "+event.getCategoryModel().getName(),Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onServicesItemClick (ServiceItemClick event)
-    {
-        if(event.isSuccess())
-        {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onServicesItemClick(ServiceItemClick event) {
+        if (event.isSuccess()) {
             navController.navigate(R.id.nav_service_detail);
             //Toast.makeText(this,"Click to "+event.getCategoryModel().getName(),Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onHideFABEvent (HideFABCart event)
-    {
-        if(event.isHidden())
-        {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onHideFABEvent(HideFABCart event) {
+        if (event.isHidden()) {
             fab.hide();
-        }
-        else
+        } else
             fab.show();
     }
 
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onCartCounter (CounterCardEvent event)
-    {
-        if(event.isSuccess())
-        {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onCartCounter(CounterCardEvent event) {
+        if (event.isSuccess()) {
             countCartItem();
         }
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onBestDealItemClick (BestDealItemClick event)
-    {
-        if(event.getBestDealModel() != null)
-        {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onBestDealItemClick(BestDealItemClick event) {
+        if (event.getBestDealModel() != null) {
             dialog.show();
 
             FirebaseDatabase.getInstance()
@@ -491,8 +519,7 @@ navigationView.bringToFront(); //fixed
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists())
-                            {
+                            if (snapshot.exists()) {
                                 Common.categorySelected = snapshot.getValue(CategoryModel.class);
                                 Common.categorySelected.setCatalog_id(snapshot.getKey());
                                 //load services
@@ -506,18 +533,14 @@ navigationView.bringToFront(); //fixed
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                if(snapshot.exists())
-                                                {
-                                                    for(DataSnapshot itemSnapshot:snapshot.getChildren())
-                                                    {
+                                                if (snapshot.exists()) {
+                                                    for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
                                                         Common.selectedService = itemSnapshot.getValue(LaundryServicesModel.class);
                                                         Common.selectedService.setKey(itemSnapshot.getKey());
                                                     }
                                                     navController.navigate(R.id.nav_service_detail);
 
-                                                }
-                                                else
-                                                {
+                                                } else {
 
                                                     Toast.makeText(Main4Activity.this, "Item not exist", Toast.LENGTH_SHORT).show();
                                                 }
@@ -533,9 +556,7 @@ navigationView.bringToFront(); //fixed
                                         });
 
 
-                            }
-                            else
-                            {
+                            } else {
                                 dialog.dismiss();
                                 Toast.makeText(Main4Activity.this, "Item not exist", Toast.LENGTH_SHORT).show();
                             }
@@ -546,18 +567,16 @@ navigationView.bringToFront(); //fixed
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                             dialog.dismiss();
-                            Toast.makeText(Main4Activity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Main4Activity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     });
         }
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onRecommendedItemClick (RecommendedCategoryClick event)
-    {
-        if(event.getRecommendedServicesModel() != null)
-        {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onRecommendedItemClick(RecommendedCategoryClick event) {
+        if (event.getRecommendedServicesModel() != null) {
             dialog.show();
 
             FirebaseDatabase.getInstance()
@@ -566,8 +585,7 @@ navigationView.bringToFront(); //fixed
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists())
-                            {
+                            if (snapshot.exists()) {
                                 Common.categorySelected = snapshot.getValue(CategoryModel.class);
                                 Common.categorySelected.setCatalog_id(snapshot.getKey());
                                 //load services
@@ -581,18 +599,14 @@ navigationView.bringToFront(); //fixed
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                if(snapshot.exists())
-                                                {
-                                                    for(DataSnapshot itemSnapshot:snapshot.getChildren())
-                                                    {
+                                                if (snapshot.exists()) {
+                                                    for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
                                                         Common.selectedService = itemSnapshot.getValue(LaundryServicesModel.class);
                                                         Common.selectedService.setKey(itemSnapshot.getKey());
                                                     }
                                                     navController.navigate(R.id.nav_service_detail);
 
-                                                }
-                                                else
-                                                {
+                                                } else {
 
                                                     Toast.makeText(Main4Activity.this, "Item not exist", Toast.LENGTH_SHORT).show();
                                                 }
@@ -608,9 +622,7 @@ navigationView.bringToFront(); //fixed
                                         });
 
 
-                            }
-                            else
-                            {
+                            } else {
                                 dialog.dismiss();
                                 Toast.makeText(Main4Activity.this, "Item not exist", Toast.LENGTH_SHORT).show();
                             }
@@ -621,7 +633,7 @@ navigationView.bringToFront(); //fixed
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                             dialog.dismiss();
-                            Toast.makeText(Main4Activity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Main4Activity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -660,11 +672,10 @@ navigationView.bringToFront(); //fixed
 
                             @Override
                             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                                if(!e.getMessage().contains("Query returned empty")) {
+                                if (!e.getMessage().contains("Query returned empty")) {
 
                                     Toast.makeText(Main4Activity.this, "[COUNT CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                                else
+                                } else
                                     fab.setCount(0);
 
                             }
@@ -679,12 +690,7 @@ navigationView.bringToFront(); //fixed
         });
 
 
-
     }
-
-
-
-
 
 
     private void signOut() {
@@ -701,11 +707,11 @@ navigationView.bringToFront(); //fixed
             public void onClick(DialogInterface dialog, int which) {
 
                 Common.selectedService = null;
-                Common.categorySelected =null;
+                Common.categorySelected = null;
 
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(Main4Activity.this,second.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                Intent intent = new Intent(Main4Activity.this, second.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }
@@ -715,20 +721,18 @@ navigationView.bringToFront(); //fixed
 
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void countCartAgain (CounterCardEvent event)
-    {
-        if(event.isSuccess())
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void countCartAgain(CounterCardEvent event) {
+        if (event.isSuccess())
             countCartItem();
 
 
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onMenuItemBack (MenuItemBack event)
-    {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMenuItemBack(MenuItemBack event) {
         menuClickId = -1;
-        if(getSupportFragmentManager().getBackStackEntryCount() > 0)
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
             getSupportFragmentManager().popBackStack();
         //navController.popBackStack(R.id.nav_home,true);
     }

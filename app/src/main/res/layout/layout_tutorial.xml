@@ -60,7 +60,7 @@
 "
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/grey"
+                android:textColor="@color/grey3"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
@@ -81,7 +81,7 @@ Large dobi bag (16 kg) approximately fit up to 75pcs
 "
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/greyblack"
+                android:textColor="@color/grey2"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 />
@@ -140,7 +140,7 @@ Large dobi bag (16 kg) approximately fit up to 75pcs
                 android:text="Place order and pick a time for\nyour pickup and delivery session."
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/grey"
+                android:textColor="@color/grey3"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
@@ -175,7 +175,7 @@ Large dobi bag (16 kg) approximately fit up to 75pcs
 "
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/grey"
+                android:textColor="@color/grey3"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
@@ -245,7 +245,7 @@ Large dobi bag (16 kg) approximately fit up to 75pcs
 "
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/grey"
+                android:textColor="@color/grey3"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
